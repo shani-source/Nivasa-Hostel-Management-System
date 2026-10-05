@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Student Dashboard | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+
+    <style>
+
+        /* =====================================================
+           DASHBOARD CONTENT ONLY
+           OUTER LAYOUT MATCHES OTHER STUDENT PAGES
+           ===================================================== */
+
+        .student-dashboard-content {
+            width: 100%;
+        }
+
+
+        /* ================= WELCOME ================= */
+
+        .student-welcome {
+            padding: 25px 28px;
+
+            margin-bottom: 24px;
+
+            border-radius: 16px;
+
+            background: linear-gradient(
+                135deg,
+                #0f5f68,
+                #126c72
+            );
+
+            color: #ffffff;
+
+            box-shadow:
+                0 8px 24px rgba(15, 95, 104, 0.12);
+        }
+
+
+        .student-welcome-label {
+            margin: 0 0 7px;
+
+            font-size: 11px;
+            font-weight: 700;
+
+            letter-spacing: 1.2px;
+
+            opacity: 0.78;
+        }
+
+
+        .student-welcome h1 {
+            margin: 0 0 7px;
+
+            font-size: 27px;
+            line-height: 1.3;
+        }
+
+
+        .student-welcome p:last-child {
+            margin: 0;
+
+            font-size: 14px;
+
+            opacity: 0.88;
+        }
+
+
+        /* ================= SUMMARY CARDS ================= */
+
+        .student-summary-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 18px;
+
+            margin-bottom: 24px;
+        }
+
+
+        .student-summary-card {
+            display: flex;
+            align-items: flex-start;
+
+            gap: 14px;
+
+            padding: 20px;
+
+            min-width: 0;
+
+            background: #ffffff;
+
+            border: 1px solid #e4e9ee;
+
+            border-radius: 14px;
+
+            text-decoration: none;
+
+            color: inherit;
+
+            box-shadow:
+                0 4px 14px rgba(15, 23, 42, 0.04);
+
+            transition: 0.2s ease;
+        }
+
+
+        .student-summary-card:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 20px rgba(15, 23, 42, 0.08);
+        }
+
+
+        .student-summary-icon {
+            width: 45px;
+            height: 45px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background: #e6f6f7;
+
+            font-size: 21px;
+        }
+
+
+        .student-summary-text {
+            min-width: 0;
+        }
+
+
+        .student-summary-text span {
+            display: block;
+
+            margin-bottom: 5px;
+
+            font-size: 12px;
+            font-weight: 600;
+
+            color: #64748b;
+        }
+
+
+        .student-summary-text strong {
+            display: block;
+
+            margin-bottom: 5px;
+
+            font-size: 20px;
+
+            color: #0f172a;
+        }
+
+
+        .student-summary-text small {
+            display: block;
+
+            color: #94a3b8;
+
+            font-size: 11px;
+
+            line-height: 1.4;
+        }
+
+
+        /* ================= COMMON SECTION ================= */
+
+        .student-dashboard-card {
+            margin-bottom: 24px;
+
+            padding: 23px;
+
+            background: #ffffff;
+
+            border: 1px solid #e4e9ee;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 4px 14px rgba(15, 23, 42, 0.035);
+        }
+
+
+        .student-dashboard-card-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .student-dashboard-card-header h2 {
+            margin: 0 0 5px;
+
+            font-size: 18px;
+
+            color: #0f172a;
+        }
+
+
+        .student-dashboard-card-header p {
+            margin: 0;
+
+            color: #64748b;
+
+            font-size: 12px;
+        }
+
+
+        .student-profile-link {
+            padding: 8px 12px;
+
+            border-radius: 8px;
+
+            background: #eef9f9;
+
+            color: #0f6c70;
+
+            text-decoration: none;
+
+            font-size: 12px;
+            font-weight: 600;
+
+            white-space: nowrap;
+        }
+
+
+        .student-profile-link:hover {
+            background: #dff3f3;
+        }
+
+
+        /* ================= STUDENT INFORMATION ================= */
+
+        .student-information-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 13px;
+        }
+
+
+        .student-information-item {
+            padding: 15px;
+
+            border-radius: 10px;
+
+            background: #f8fafb;
+
+            border: 1px solid #edf1f4;
+        }
+
+
+        .student-information-item span {
+            display: block;
+
+            margin-bottom: 6px;
+
+            font-size: 11px;
+            font-weight: 600;
+
+            color: #64748b;
+        }
+
+
+        .student-information-item strong {
+            display: block;
+
+            font-size: 13px;
+
+            color: #0f172a;
+
+            word-break: break-word;
+        }
+
+
+        /* ================= ACTIVITY ================= */
+
+        .student-activity-list {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 9px;
+        }
+
+
+        .student-activity-row {
+            display: grid;
+
+            grid-template-columns:
+                42px minmax(0, 1fr) auto;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 12px;
+
+            border: 1px solid #edf1f4;
+
+            border-radius: 10px;
+
+            background: #fafcfd;
+        }
+
+
+        .student-activity-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background: #e8f7f8;
+
+            font-size: 18px;
+        }
+
+
+        .student-activity-text {
+            min-width: 0;
+        }
+
+
+        .student-activity-text strong {
+            display: block;
+
+            margin-bottom: 4px;
+
+            color: #0f172a;
+
+            font-size: 13px;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+        }
+
+
+        .student-activity-text span {
+            display: block;
+
+            color: #64748b;
+
+            font-size: 11px;
+        }
+
+
+        .student-activity-status {
+            padding: 6px 10px;
+
+            border-radius: 20px;
+
+            background: #eef9f9;
+
+            color: #0f6c70;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            white-space: nowrap;
+        }
+
+
+        /* ================= EMPTY ================= */
+
+        .student-empty {
+            padding: 30px 20px;
+
+            text-align: center;
+
+            border: 1px dashed #cfd8df;
+
+            border-radius: 10px;
+
+            background: #fafcfd;
+        }
+
+
+        .student-empty-icon {
+            margin-bottom: 7px;
+
+            font-size: 26px;
+        }
+
+
+        .student-empty h3 {
+            margin: 0 0 5px;
+
+            color: #334155;
+
+            font-size: 15px;
+        }
+
+
+        .student-empty p {
+            margin: 0;
+
+            color: #94a3b8;
+
+            font-size: 12px;
+        }
+
+
+        /* ================= QUICK ACTIONS ================= */
+
+        .student-quick-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 12px;
+        }
+
+
+        .student-quick-action {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 13px 14px;
+
+            border: 1px solid #e4e9ee;
+
+            border-radius: 10px;
+
+            background: #ffffff;
+
+            color: #334155;
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            transition: 0.2s ease;
+        }
+
+
+        .student-quick-action:hover {
+            background: #eef9f9;
+
+            border-color: #b9e5e5;
+
+            color: #0f6c70;
+        }
+
+
+        .student-quick-icon {
+            width: 34px;
+            height: 34px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            background: #e8f7f8;
+
+            font-size: 16px;
+        }
+
+
+        /* ================= TABLET ================= */
+
+        @media (max-width: 1100px) {
+
+            .student-summary-grid {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+            .student-information-grid {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+            .student-quick-grid {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 768px) {
+
+            .student-summary-grid,
+            .student-information-grid,
+            .student-quick-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .student-welcome {
+                padding: 22px;
+            }
+
+            .student-welcome h1 {
+                font-size: 23px;
+            }
+
+            .student-dashboard-card {
+                padding: 18px;
+            }
+
+            .student-dashboard-card-header {
+                align-items: flex-start;
+            }
+
+            .student-activity-row {
+                grid-template-columns:
+                    40px minmax(0, 1fr);
+            }
+
+            .student-activity-status {
+                grid-column: 2;
+
+                justify-self: start;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    {% include "student/_sidebar.html" %}
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main class="dashboard-main">
+
+
+        <!-- =================================================
+             TOP BAR
+             ================================================= -->
+
+        <header class="dashboard-topbar">
+
+
+            <div>
+
+                <button
+                    type="button"
+                    class="mobile-menu"
+                >
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Student Dashboard
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+
+                <!-- NOTIFICATION -->
+
+                <div class="notification">
+                    🔔
+                </div>
+
+
+                <!-- AVATAR -->
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+
+                <!-- USER -->
+
+                <div>
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Student
+                    </small>
+
+                </div>
+
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             CONTENT
+             ================================================= -->
+
+        <section class="dashboard-content">
+
+
+            <div class="student-dashboard-content">
+
+
+                <!-- =================================================
+                     WELCOME
+                     ================================================= -->
+
+                <div class="student-welcome">
+
+                    <p class="student-welcome-label">
+                        YOUR PERSONAL SPACE
+                    </p>
+
+                    <h1>
+                        Good to see you,
+                        {{ user.name }} 👋
+                    </h1>
+
+                    <p>
+                        Here's what's happening with your stay.
+                    </p>
+
+                </div>
+
+
+                <!-- =================================================
+                     SUMMARY
+                     ================================================= -->
+
+                <div class="student-summary-grid">
+
+
+                    <!-- ROOM -->
+
+                    <a
+                        href="{{ url_for('student.my_room') }}"
+                        class="student-summary-card"
+                    >
+
+                        <div class="student-summary-icon">
+                            🛏️
+                        </div>
+
+                        <div class="student-summary-text">
+
+                            <span>
+                                My Room
+                            </span>
+
+                            <strong>
+
+                                {% if student and student.room_allocations %}
+
+                                    Room
+                                    {{ student.room_allocations[0].room.room_number }}
+
+                                {% else %}
+
+                                    Not assigned
+
+                                {% endif %}
+
+                            </strong>
+
+                            <small>
+
+                                {% if student and student.room_allocations %}
+
+                                    Hostel accommodation
+
+                                {% else %}
+
+                                    Contact admin for allocation
+
+                                {% endif %}
+
+                            </small>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- COMPLAINTS -->
+
+                    <a
+                        href="{{ url_for('student.complaints') }}"
+                        class="student-summary-card"
+                    >
+
+                        <div class="student-summary-icon">
+                            📋
+                        </div>
+
+                        <div class="student-summary-text">
+
+                            <span>
+                                Complaints
+                            </span>
+
+                            <strong>
+                                {{ complaints|length }}
+                            </strong>
+
+                            <small>
+                                {{ pending_complaints }} pending ·
+                                {{ in_progress_complaints }} in progress ·
+                                {{ resolved_complaints }} resolved
+                            </small>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- FEES -->
+
+                    <a
+                        href="{{ url_for('student.fees') }}"
+                        class="student-summary-card"
+                    >
+
+                        <div class="student-summary-icon">
+                            💳
+                        </div>
+
+                        <div class="student-summary-text">
+
+                            <span>
+                                Hostel Fees
+                            </span>
+
+                            <strong>
+                                ₹{{ "%.0f"|format(pending_fees) }}
+                            </strong>
+
+                            <small>
+
+                                {% if pending_fees > 0 %}
+
+                                    Pending payment
+
+                                {% else %}
+
+                                    No pending fees
+
+                                {% endif %}
+
+                            </small>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- LEAVE -->
+
+                    <a
+                        href="{{ url_for('student.leave') }}"
+                        class="student-summary-card"
+                    >
+
+                        <div class="student-summary-icon">
+                            📅
+                        </div>
+
+                        <div class="student-summary-text">
+
+                            <span>
+                                Leave Requests
+                            </span>
+
+                            <strong>
+                                {{ leave_requests|length }}
+                            </strong>
+
+                            <small>
+                                {{ pending_leave_requests }} pending ·
+                                {{ approved_leave_requests }} approved ·
+                                {{ rejected_leave_requests }} rejected
+                            </small>
+
+                        </div>
+
+                    </a>
+
+
+                </div>
+
+
+                <!-- =================================================
+                     STUDENT INFORMATION
+                     ================================================= -->
+
+                <section class="student-dashboard-card">
+
+
+                    <div class="student-dashboard-card-header">
+
+                        <div>
+
+                            <h2>
+                                Student Information
+                            </h2>
+
+                            <p>
+                                Your academic profile at a glance
+                            </p>
+
+                        </div>
+
+
+                        <a
+                            href="{{ url_for('student.edit_profile') }}"
+                            class="student-profile-link"
+                        >
+                            View Profile →
+                        </a>
+
+                    </div>
+
+
+                    <div class="student-information-grid">
+
+
+                        <div class="student-information-item">
+
+                            <span>
+                                Enrollment No.
+                            </span>
+
+                            <strong>
+                                {{ student.enrollment_no or "Not added" }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="student-information-item">
+
+                            <span>
+                                Course
+                            </span>
+
+                            <strong>
+                                {{ student.course or "Not added" }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="student-information-item">
+
+                            <span>
+                                Branch
+                            </span>
+
+                            <strong>
+                                {{ student.branch or "Not added" }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="student-information-item">
+
+                            <span>
+                                Year
+                            </span>
+
+                            <strong>
+
+                                {% if student.year %}
+
+                                    {{ student.year }}{{ "st"
+                                        if student.year == 1
+                                        else "nd"
+                                        if student.year == 2
+                                        else "rd"
+                                        if student.year == 3
+                                        else "th"
+                                    }} Year
+
+                                {% else %}
+
+                                    Not added
+
+                                {% endif %}
+
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     RECENT ACTIVITY
+                     ================================================= -->
+
+                <section class="student-dashboard-card">
+
+
+                    <div class="student-dashboard-card-header">
+
+                        <div>
+
+                            <h2>
+                                Recent Activity
+                            </h2>
+
+                            <p>
+                                Your latest hostel activities
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if activities %}
+
+
+                        <div class="student-activity-list">
+
+
+                            {% for activity in activities %}
+
+
+                                <div class="student-activity-row">
+
+
+                                    {% if activity.type == "complaint" %}
+
+
+                                        <div class="student-activity-icon">
+                                            📋
+                                        </div>
+
+
+                                        <div class="student-activity-text">
+
+                                            <strong>
+                                                Complaint:
+                                                {{ activity.item.title }}
+                                            </strong>
+
+                                            <span>
+                                                Status:
+                                                {{ activity.item.status }}
+                                            </span>
+
+                                        </div>
+
+
+                                        <div class="student-activity-status">
+                                            {{ activity.item.category }}
+                                        </div>
+
+
+                                    {% elif activity.type == "leave" %}
+
+
+                                        <div class="student-activity-icon">
+                                            📅
+                                        </div>
+
+
+                                        <div class="student-activity-text">
+
+                                            <strong>
+                                                Leave Request
+                                            </strong>
+
+                                            <span>
+                                                {{ activity.item.from_date }}
+                                                to
+                                                {{ activity.item.to_date }}
+                                            </span>
+
+                                        </div>
+
+
+                                        <div class="student-activity-status">
+                                            {{ activity.item.status }}
+                                        </div>
+
+
+                                    {% elif activity.type == "fee" %}
+
+
+                                        <div class="student-activity-icon">
+                                            💳
+                                        </div>
+
+
+                                        <div class="student-activity-text">
+
+                                            <strong>
+                                                {{ activity.item.fee_type }}
+                                            </strong>
+
+                                            <span>
+                                                ₹{{ "%.0f"|format(activity.item.amount) }}
+                                            </span>
+
+                                        </div>
+
+
+                                        <div class="student-activity-status">
+                                            {{ activity.item.payment_status }}
+                                        </div>
+
+
+                                    {% endif %}
+
+
+                                </div>
+
+
+                            {% endfor %}
+
+
+                        </div>
+
+
+                    {% else %}
+
+
+                        <div class="student-empty">
+
+                            <div class="student-empty-icon">
+                                ✨
+                            </div>
+
+                            <h3>
+                                Nothing here yet
+                            </h3>
+
+                            <p>
+                                Your hostel activities will appear here.
+                            </p>
+
+                        </div>
+
+
+                    {% endif %}
+
+
+                </section>
+
+
+                <!-- =================================================
+                     QUICK ACTIONS
+                     ================================================= -->
+
+                <section class="student-dashboard-card">
+
+
+                    <div class="student-dashboard-card-header">
+
+                        <div>
+
+                            <h2>
+                                Quick Actions
+                            </h2>
+
+                            <p>
+                                Frequently used services
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="student-quick-grid">
+
+
+                        <a
+                            href="{{ url_for('student.create_complaint') }}"
+                            class="student-quick-action"
+                        >
+
+                            <span class="student-quick-icon">
+                                📋
+                            </span>
+
+                            <span>
+                                Submit Complaint
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="{{ url_for('student.apply_leave') }}"
+                            class="student-quick-action"
+                        >
+
+                            <span class="student-quick-icon">
+                                📅
+                            </span>
+
+                            <span>
+                                Apply for Leave
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="{{ url_for('student.assistant') }}"
+                            class="student-quick-action"
+                        >
+
+                            <span class="student-quick-icon">
+                                🤖
+                            </span>
+
+                            <span>
+                                Ask AI Assistant
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="{{ url_for('student.notices') }}"
+                            class="student-quick-action"
+                        >
+
+                            <span class="student-quick-icon">
+                                📢
+                            </span>
+
+                            <span>
+                                View Notices
+                            </span>
+
+                        </a>
+
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

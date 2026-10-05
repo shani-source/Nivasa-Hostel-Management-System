@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Students | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+    {% include "admin/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button
+                    type="button"
+                    class="mobile-menu"
+                >
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Student Management
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="dashboard-content">
+
+
+            <!-- PAGE HEADER -->
+            <div class="admin-page-header">
+
+                <div>
+
+                    <h1>
+                        All Students 👥
+                    </h1>
+
+                    <p>
+                        View student information and accommodation details.
+                    </p>
+
+                </div>
+<a
+        href="{{ url_for('admin.create_student') }}"
+        class="admin-primary-btn"
+    >
+        + Add Student
+    </a>
+            </div>
+
+
+<!-- ================= COURSE TABS ================= -->
+
+<div class="student-course-tabs">
+
+    <!-- ALL -->
+    <a
+        href="{{ url_for('admin.students') }}"
+        class="course-tab {% if not selected_course %}active{% endif %}"
+    >
+        <span>All Courses</span>
+        <strong>{{ total_students }}</strong>
+    </a>
+
+
+    <!-- INDIVIDUAL COURSES -->
+    {% for course in courses %}
+
+        <a
+            href="{{ url_for('admin.students', course=course) }}"
+            class="course-tab {% if selected_course == course %}active{% endif %}"
+        >
+            <span>{{ course }}</span>
+
+            <strong>
+                {{ course_counts[course] }}
+            </strong>
+
+        </a>
+
+    {% endfor %}
+
+</div>
+
+
+
+
+            <!-- STUDENTS TABLE -->
+            <div class="admin-content-card">
+
+
+                {% if students %}
+
+
+                    <div class="admin-table-wrapper">
+
+
+                        <table class="admin-table">
+
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Student
+                                    </th>
+
+                                    <th>
+                                        Enrollment
+                                    </th>
+
+                                    <th>
+                                        Course
+                                    </th>
+
+                                    <th>
+                                        Branch
+                                    </th>
+
+                                    <th>
+                                        Year
+                                    </th>
+
+                                    <th>
+                                        Room
+                                    </th>
+
+                                    <th>
+                                        Gender
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+
+                                {% for student in students %}
+
+
+                                    {% set student_allocations = allocations
+                                        |selectattr("student_id", "equalto", student.id)
+                                        |list
+                                    %}
+
+
+                                    <tr>
+
+
+                                        <!-- STUDENT -->
+                                        <td>
+
+                                            <div class="student-table-student">
+
+                                                <div class="student-table-avatar">
+
+                                                    {% if student.user %}
+                                                        {{ student.user.name[0]|upper }}
+                                                    {% else %}
+                                                        S
+                                                    {% endif %}
+
+                                                </div>
+
+
+                                                <div>
+
+                                                    <strong>
+
+                                                        {% if student.user %}
+                                                            {{ student.user.name }}
+                                                        {% else %}
+                                                            Student
+                                                        {% endif %}
+
+                                                    </strong>
+
+                                                    <small>
+                                                        Student Profile
+                                                    </small>
+
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+
+                                        <!-- ENROLLMENT -->
+                                        <td>
+
+                                            {{ student.enrollment_no or "Not added" }}
+
+                                        </td>
+
+
+                                        <!-- COURSE -->
+                                        
+<td>
+
+    {% if student.course %}
+
+        <span class="course-badge">
+            {{ student.course }}
+        </span>
+
+    {% else %}
+
+        <span class="no-students">
+            Not added
+        </span>
+
+    {% endif %}
+
+</td>
+
+
+
+                                        <!-- BRANCH -->
+                                        <td>
+
+                                            {{ student.branch or "Not added" }}
+
+                                        </td>
+
+
+                                        <!-- YEAR -->
+                                        <td>
+
+                                            {% if student.year %}
+                                                Year {{ student.year }}
+                                            {% else %}
+                                                Not added
+                                            {% endif %}
+
+                                        </td>
+
+
+                                        <!-- ROOM -->
+                                        <td>
+
+                                            {% if student_allocations %}
+
+                                                {% for allocation in student_allocations %}
+
+                                                    <strong>
+                                                        Room {{ allocation.room.room_number }}
+                                                    </strong>
+
+                                                    <br>
+
+                                                    <small>
+                                                        {{ allocation.status|title }}
+                                                    </small>
+
+                                                {% endfor %}
+
+                                            {% else %}
+
+                                                <span class="no-students">
+                                                    No room
+                                                </span>
+
+                                            {% endif %}
+
+                                        </td>
+
+
+                                        <!-- GENDER -->
+                                        <td>
+
+                                            {{ student.gender|title
+                                                if student.gender
+                                                else "Not added"
+                                            }}
+
+                                        </td>
+
+
+                                    </tr>
+
+
+                                {% endfor %}
+
+
+                            </tbody>
+
+
+                        </table>
+
+
+                    </div>
+
+
+                {% else %}
+
+
+                    <!-- EMPTY STATE -->
+                    <div class="admin-empty">
+
+                        <div class="admin-empty-icon">
+                            👥
+                        </div>
+
+                        <h3>
+                            No students
+                        </h3>
+
+                        <p>
+                            No student profiles are registered yet.
+                        </p>
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Hostels | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+    {% include "admin/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button
+                    type="button"
+                    class="mobile-menu"
+                >
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Hostel Management
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="dashboard-content">
+
+
+            <!-- PAGE HEADER -->
+            <div class="admin-page-header">
+
+                <div>
+
+                    <h1>
+                        All Hostels 🏠
+                    </h1>
+
+                    <p>
+                        View each hostel, its rooms and allocated students.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('admin.create_hostel') }}"
+                    class="admin-primary-btn"
+                >
+                    + Add Hostel
+                </a>
+
+            </div>
+
+
+            {% if hostels %}
+
+
+                <!-- HOSTEL CARDS -->
+                <div class="hostel-grid">
+
+
+                    {% for hostel in hostels %}
+
+
+                        <!-- FIND ROOMS OF THIS HOSTEL -->
+                        {% set hostel_rooms = rooms
+                            |selectattr("hostel_id", "equalto", hostel.id)
+                            |list
+                        %}
+
+
+                        <div class="hostel-card">
+
+
+                            <!-- HOSTEL HEADER -->
+                            <div class="hostel-card-header">
+
+
+                                <div class="hostel-card-icon">
+                                    🏠
+                                </div>
+
+
+                                <div>
+
+                                    <h3>
+                                        {{ hostel.name }}
+                                    </h3>
+
+                                    <span>
+                                        {{ hostel.gender or "All" }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- HOSTEL DETAILS -->
+                            <div class="hostel-card-details">
+
+
+                                <div class="hostel-detail">
+
+                                    <span>
+                                        Warden
+                                    </span>
+
+                                    <strong>
+                                        {{ hostel.warden_name or "Not assigned" }}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="hostel-detail">
+
+                                    <span>
+                                        Address
+                                    </span>
+
+                                    <strong>
+                                        {{ hostel.address or "Not provided" }}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="hostel-detail">
+
+                                    <span>
+                                        Total Rooms
+                                    </span>
+
+                                    <strong>
+                                        {{ hostel_rooms|length }}
+                                    </strong>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <!-- ROOM INFORMATION -->
+                            {% if hostel_rooms %}
+
+                                <div class="hostel-room-summary">
+
+                                    <div class="hostel-room-summary-title">
+                                        🛏️ Rooms
+                                    </div>
+
+
+                                    {% for room in hostel_rooms %}
+
+                                        {% set room_allocations = allocations
+                                            |selectattr("room_id", "equalto", room.id)
+                                            |list
+                                        %}
+
+
+                                        <div class="hostel-room-item">
+
+                                            <div>
+
+                                                <strong>
+                                                    Room {{ room.room_number }}
+                                                </strong>
+
+                                                <span>
+                                                    Floor {{ room.floor or "N/A" }}
+                                                </span>
+
+                                            </div>
+
+
+                                            <div>
+
+                                                <span>
+                                                    {{ room.occupied }}/{{ room.capacity }}
+                                                    occupied
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+
+                                    {% endfor %}
+
+                                </div>
+
+
+                            {% else %}
+
+
+                                <div class="no-students">
+                                    No rooms created for this hostel.
+                                </div>
+
+
+                            {% endif %}
+
+
+                            <!-- VIEW ROOMS -->
+                            <a
+                                href="{{ url_for('admin.rooms',hostel_id=hostel.id) }}"
+                                class="admin-secondary-btn"
+                            >
+                                View Rooms →
+                            </a>
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- NO HOSTELS -->
+                <div class="admin-empty">
+
+                    <div class="admin-empty-icon">
+                        🏠
+                    </div>
+
+                    <h3>
+                        No hostels yet
+                    </h3>
+
+                    <p>
+                        Create a hostel to start managing rooms and students.
+                    </p>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

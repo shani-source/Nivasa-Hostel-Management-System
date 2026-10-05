@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Rooms | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+    {% include "admin/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button
+                    type="button"
+                    class="mobile-menu"
+                >
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Room Management
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="dashboard-content">
+
+
+            <!-- PAGE HEADER -->
+            <div class="admin-page-header">
+
+                <div>
+
+                    <h1>
+                        All Rooms 🛏️
+                    </h1>
+
+                    <p>
+                        View room capacity, occupancy and students.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('admin.create_room') }}"
+                    class="admin-primary-btn"
+                >
+                    + Add Room
+                </a>
+
+            </div>
+
+
+            <!-- ROOM LIST -->
+            <section class="admin-section">
+
+
+                {% if rooms %}
+
+                    <div class="room-grid">
+
+
+                        {% for room in rooms %}
+
+
+                            {% set room_allocations = allocations
+                                |selectattr("room_id", "equalto", room.id)
+                                |list
+                            %}
+
+
+                            <div class="room-card-admin">
+
+
+                                <!-- ROOM HEADER -->
+                                <div class="room-card-admin-header">
+
+
+                                    <div class="room-card-admin-icon">
+                                        🛏️
+                                    </div>
+
+
+                                    <div>
+
+                                        <h3>
+                                            Room {{ room.room_number }}
+                                        </h3>
+
+                                        <span>
+                                            {{ room.status|title }}
+                                        </span>
+
+                                    </div>
+
+
+                                </div>
+
+
+                                <!-- ROOM DETAILS -->
+                                <div class="room-card-admin-details">
+
+
+                                    <div class="room-detail-admin">
+
+                                        <span>
+                                            Hostel
+                                        </span>
+
+                                        <strong>
+                                            {{ room.hostel.name }}
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="room-detail-admin">
+
+                                        <span>
+                                            Floor
+                                        </span>
+
+                                        <strong>
+                                            {{ room.floor or "N/A" }}
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="room-detail-admin">
+
+                                        <span>
+                                            Capacity
+                                        </span>
+
+                                        <strong>
+                                            {{ room.capacity }}
+                                        </strong>
+
+                                    </div>
+
+
+                                    <div class="room-detail-admin">
+
+                                        <span>
+                                            Occupied
+                                        </span>
+
+                                        <strong>
+                                            {{ room.occupied }}
+                                        </strong>
+
+                                    </div>
+
+
+                                </div>
+
+
+                                <!-- STUDENTS -->
+                                <div class="room-students">
+
+
+                                    {% if room_allocations %}
+
+
+                                        <div class="room-students-title">
+                                            👥 Allocated Students
+                                        </div>
+
+
+                                        {% for allocation in room_allocations %}
+
+                                            <div class="room-student-item">
+
+                                                <strong>
+                                                    {{ allocation.student.enrollment_no }}
+                                                </strong>
+
+
+                                                {% if allocation.student.course %}
+
+                                                    <span>
+                                                        {{ allocation.student.course }}
+                                                    </span>
+
+                                                {% endif %}
+
+                                            </div>
+
+                                        {% endfor %}
+
+
+                                    {% else %}
+
+
+                                        <div class="no-students">
+                                            No students allocated
+                                        </div>
+
+
+                                    {% endif %}
+
+
+                                </div>
+
+
+                            </div>
+
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                {% else %}
+
+
+                    <!-- EMPTY STATE -->
+                    <div class="admin-empty">
+
+                        <div class="admin-empty-icon">
+                            🛏️
+                        </div>
+
+                        <h3>
+                            No rooms yet
+                        </h3>
+
+                        <p>
+                            Create a room to start managing accommodation.
+                        </p>
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </section>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

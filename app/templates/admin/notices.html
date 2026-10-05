@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Nivasa | Notices</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+    {% include "admin/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button class="mobile-menu">
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Notice Management
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ current_user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ current_user.name }}
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="dashboard-content">
+
+
+            {% include "_flash_messages.html" %}
+
+
+            <!-- PAGE HEADER -->
+            <div class="admin-page-header">
+
+                <div>
+
+                    <h1>
+                        Notices & Announcements
+                    </h1>
+
+                    <p>
+                        Publish important announcements for hostel residents.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('admin.create_notice') }}"
+                    class="admin-primary-btn"
+                >
+                    + New Notice
+                </a>
+
+            </div>
+
+
+            <!-- NOTICE CONTENT -->
+            <div class="admin-content-card">
+
+
+                <!-- CARD HEADER -->
+                <div class="admin-card-header">
+
+                    <div>
+
+                        <h3>
+                            Published Notices
+                        </h3>
+
+                        <span>
+                            All announcements currently available to students.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                {% if notices %}
+
+
+                    <div class="notice-list">
+
+
+                        {% for notice in notices %}
+
+
+                            <div class="notice-card">
+
+
+                                <div class="notice-card-content">
+
+
+                                    <div class="notice-top">
+
+                                        <span class="notice-category">
+                                            {{ notice.category }}
+                                        </span>
+
+                                        <span class="notice-date">
+                                            {{ notice.created_at.strftime("%d %b %Y") }}
+                                        </span>
+
+                                    </div>
+
+
+                                    <h3>
+                                        {{ notice.title }}
+                                    </h3>
+
+
+                                    <p>
+                                        {{ notice.content }}
+                                    </p>
+
+
+                                </div>
+
+
+                                <!-- DELETE -->
+                                <form
+                                    method="POST"
+                                    action="{{ url_for(
+                                        'admin.delete_notice',
+                                        notice_id=notice.id
+                                    ) }}"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="csrf_token"
+                                        value="{{ csrf_token() }}"
+                                    >
+
+
+                                    <button
+                                        type="submit"
+                                        class="notice-delete"
+                                        onclick="return confirm('Delete this notice?')"
+                                    >
+                                        Delete
+                                    </button>
+
+                                </form>
+
+
+                            </div>
+
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                {% else %}
+
+
+                    <!-- EMPTY STATE -->
+                    <div class="admin-empty">
+
+                        <div class="admin-empty-icon">
+                            📢
+                        </div>
+
+                        <h3>
+                            No notices yet
+                        </h3>
+
+                        <p>
+                            Publish your first announcement for students.
+                        </p>
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

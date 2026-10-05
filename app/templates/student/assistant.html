@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Assistant | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <style>
+
+        /* =========================
+           AI ASSISTANT PAGE
+        ========================= */
+
+        .assistant-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .assistant-hero {
+            background: linear-gradient(
+                135deg,
+                #0F4C5C,
+                #0F766E
+            );
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(15, 76, 92, 0.15);
+        }
+
+        .assistant-hero-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .assistant-avatar {
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            flex-shrink: 0;
+        }
+
+        .assistant-hero h1 {
+            margin: 0 0 6px;
+            font-size: 28px;
+            color: white;
+        }
+
+        .assistant-hero p {
+            margin: 0;
+            color: rgba(255,255,255,0.85);
+            font-size: 15px;
+        }
+
+        /* =========================
+           QUICK ACTIONS
+        ========================= */
+
+        .assistant-quick {
+            background: #ffffff;
+            border: 1px solid #E2E8F0;
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .assistant-quick-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0F172A;
+            margin-bottom: 14px;
+        }
+
+        .assistant-quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .assistant-quick-btn {
+            border: 1px solid #E2E8F0;
+            background: #F8FAFC;
+            color: #1E293B;
+            padding: 11px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s ease;
+        }
+
+        .assistant-quick-btn:hover {
+            background: #E6FFFB;
+            border-color: #14B8A6;
+            color: #0F766E;
+            transform: translateY(-1px);
+        }
+
+        /* =========================
+           CHAT AREA
+        ========================= */
+
+        .assistant-chat {
+            background: #ffffff;
+            border: 1px solid #E2E8F0;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+        }
+
+        .assistant-chat-header {
+            padding: 18px 22px;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .assistant-chat-header-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #E6FFFB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .assistant-chat-header strong {
+            display: block;
+            color: #0F172A;
+        }
+
+        .assistant-chat-header small {
+            color: #64748B;
+        }
+
+        .assistant-messages {
+            padding: 24px;
+            min-height: 180px;
+        }
+
+        .assistant-welcome {
+            text-align: center;
+            padding: 20px;
+            color: #64748B;
+        }
+
+        .assistant-welcome-icon {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .assistant-welcome h2 {
+            margin: 0 0 8px;
+            color: #0F172A;
+            font-size: 20px;
+        }
+
+        .assistant-welcome p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        /* =========================
+           USER MESSAGE
+        ========================= */
+
+        .assistant-user-message {
+            max-width: 75%;
+            margin-left: auto;
+            background: #0F4C5C;
+            color: white;
+            padding: 13px 16px;
+            border-radius: 16px 16px 4px 16px;
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+
+        /* =========================
+           AI RESPONSE
+        ========================= */
+
+        .assistant-response {
+            max-width: 80%;
+            background: #F1F5F9;
+            color: #1E293B;
+            padding: 16px;
+            border-radius: 16px 16px 16px 4px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .assistant-response-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0F766E;
+            margin-bottom: 5px;
+        }
+
+        /* =========================
+           INPUT
+        ========================= */
+
+        .assistant-form {
+            border-top: 1px solid #E2E8F0;
+            padding: 18px;
+            background: #F8FAFC;
+        }
+
+        .assistant-input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .assistant-input {
+            flex: 1;
+            min-width: 0;
+            border: 1px solid #CBD5E1;
+            background: white;
+            border-radius: 12px;
+            padding: 13px 15px;
+            font-size: 15px;
+            color: #1E293B;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        .assistant-input:focus {
+            border-color: #14B8A6;
+            box-shadow: 0 0 0 3px rgba(20,184,166,0.12);
+        }
+
+        .assistant-send-btn {
+            border: none;
+            background: #0F4C5C;
+            color: white;
+            border-radius: 12px;
+            padding: 0 22px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .assistant-send-btn:hover {
+            background: #0B3944;
+            transform: translateY(-1px);
+        }
+
+        .assistant-hint {
+            margin-top: 9px;
+            font-size: 12px;
+            color: #64748B;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .assistant-hero {
+                padding: 22px;
+            }
+
+            .assistant-hero h1 {
+                font-size: 23px;
+            }
+
+            .assistant-input-row {
+                flex-direction: column;
+            }
+
+            .assistant-send-btn {
+                min-height: 45px;
+            }
+
+            .assistant-user-message,
+            .assistant-response {
+                max-width: 90%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+    {% include "student/_sidebar.html" %}
+
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button
+                    type="button"
+                    class="mobile-menu"
+                >
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    AI Assistant
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Student
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="dashboard-content">
+
+
+            <div class="assistant-wrapper">
+
+
+                <!-- HERO -->
+                <div class="assistant-hero">
+
+                    <div class="assistant-hero-top">
+
+                        <div class="assistant-avatar">
+                            🤖
+                        </div>
+
+                        <div>
+
+                            <h1>
+                                Nivasa AI
+                            </h1>
+
+                            <p>
+                                Your intelligent hostel assistant
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- QUICK ACTIONS -->
+                <div class="assistant-quick">
+
+                    <div class="assistant-quick-title">
+                        What would you like to know?
+                    </div>
+
+
+                    <div class="assistant-quick-actions">
+
+
+                        <button
+                            type="button"
+                            class="assistant-quick-btn"
+                            onclick="askQuestion('What is my room?')"
+                        >
+                            🏠 My Room
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="assistant-quick-btn"
+                            onclick="askQuestion('Do I have any pending fees?')"
+                        >
+                            💰 My Fees
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="assistant-quick-btn"
+                            onclick="askQuestion('What is my complaint status?')"
+                        >
+                            🛠️ My Complaints
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="assistant-quick-btn"
+                            onclick="askQuestion('What is my leave request status?')"
+                        >
+                            📅 My Leave
+                        </button>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- CHAT -->
+                <div class="assistant-chat">
+
+
+                    <div class="assistant-chat-header">
+
+                        <div class="assistant-chat-header-icon">
+                            🤖
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Nivasa AI Assistant
+                            </strong>
+
+                            <small>
+                                Ask about your hostel information
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MESSAGES -->
+                    <div class="assistant-messages">
+
+
+                        {% if response %}
+
+
+                            <div class="assistant-user-message">
+
+                                {{ user_message }}
+
+                            </div>
+
+
+                            <div class="assistant-response">
+
+                                <div class="assistant-response-label">
+                                    🤖 Nivasa AI
+                                </div>
+
+                                {{ response }}
+
+                            </div>
+
+
+                        {% else %}
+
+
+                            <div class="assistant-welcome">
+
+                                <div class="assistant-welcome-icon">
+                                    🤖
+                                </div>
+
+                                <h2>
+                                    How can I help you?
+                                </h2>
+
+                                <p>
+                                    Ask me about your room, fees,
+                                    complaints, leave or profile.
+                                </p>
+
+                            </div>
+
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                    <!-- INPUT -->
+                    <form
+                        method="POST"
+                        class="assistant-form"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="csrf_token"
+                            value="{{ csrf_token() }}"
+                        >
+
+
+                        <div class="assistant-input-row">
+
+                            <input
+                                type="text"
+                                name="message"
+                                class="assistant-input"
+                                placeholder="Ask Nivasa AI anything..."
+                                value="{% if not response %}{{ user_message }}{% endif %}""
+                                autocomplete="off"
+                                required
+                            >
+
+
+                            <button
+                                type="submit"
+                                class="assistant-send-btn"
+                            >
+                                Send
+                            </button>
+
+                        </div>
+
+
+                        <div class="assistant-hint">
+                            Try asking: "What is my room?"
+                            or "Do I have any pending fees?"
+                        </div>
+
+                    </form>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<script>
+
+    function askQuestion(question) {
+
+        const input =
+            document.querySelector(".assistant-input");
+
+        if (input) {
+
+            input.value = question;
+
+            input.focus();
+
+        }
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

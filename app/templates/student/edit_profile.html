@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Profile | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- STUDENT SIDEBAR -->
+
+    {% include "student/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button class="mobile-menu">
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Edit Profile
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Student
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE CONTENT -->
+
+        <section class="dashboard-content">
+
+
+            <!-- FLASH MESSAGES -->
+
+            {% include "_flash_messages.html" %}
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Edit Profile
+                    </h2>
+
+                    <p>
+                        Update your academic and personal information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- PROFILE FORM -->
+
+            <div class="profile-card edit-profile-card">
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for('student.edit_profile') }}"
+                >
+
+
+                    <!-- CSRF -->
+
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}"
+                    >
+
+
+                    <!-- ACADEMIC INFORMATION -->
+
+                    <div class="profile-section">
+
+                        <h3>
+                            🎓 Academic Information
+                        </h3>
+
+
+                        <div class="profile-form-grid">
+
+
+                            <!-- ENROLLMENT -->
+
+                            <div class="profile-form-group">
+
+                                <label for="enrollment_no">
+                                    Enrollment Number
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="enrollment_no"
+                                    name="enrollment_no"
+                                    value="{{ student.enrollment_no or '' }}"
+                                    placeholder="Enter enrollment number"
+                                >
+
+                            </div>
+<!-- COURSE -->
+<div class="profile-form-group">
+
+    <label for="course">
+        Course
+    </label>
+
+    <select id="course" name="course">
+
+        <option value="">
+            Select course
+        </option>
+
+        <option value="B.Tech"
+            {% if student.course == "B.Tech" %}selected{% endif %}>
+            B.Tech
+        </option>
+
+        <option value="BCA"
+            {% if student.course == "BCA" %}selected{% endif %}>
+            BCA
+        </option>
+
+        <option value="BBA"
+            {% if student.course == "BBA" %}selected{% endif %}>
+            BBA
+        </option>
+
+        <option value="B.Com"
+            {% if student.course == "B.Com" %}selected{% endif %}>
+            B.Com
+        </option>
+
+        <option value="MCA"
+            {% if student.course == "MCA" %}selected{% endif %}>
+            MCA
+        </option>
+
+        <option value="MBA"
+            {% if student.course == "MBA" %}selected{% endif %}>
+            MBA
+        </option>
+
+    </select>
+
+</div>
+
+                           
+
+
+                            <!-- BRANCH -->
+
+                            <div class="profile-form-group">
+
+                                <label for="branch">
+                                    Branch
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="branch"
+                                    name="branch"
+                                    value="{{ student.branch or '' }}"
+                                    placeholder="e.g. CSE (AI & ML)"
+                                >
+
+                            </div>
+<!-- YEAR -->
+<div class="profile-form-group">
+
+    <label for="year">
+        Year
+    </label>
+
+    <select id="year" name="year">
+
+        <option value="">
+            Select year
+        </option>
+
+    </select>
+
+</div>
+
+             
+
+
+                    <!-- PERSONAL INFORMATION -->
+
+                    <div class="profile-section">
+
+                        <h3>
+                            👤 Personal Information
+                        </h3>
+
+
+                        <div class="profile-form-grid">
+
+
+                            <!-- GENDER -->
+
+                            <div class="profile-form-group">
+
+                                <label for="gender">
+                                    Gender
+                                </label>
+
+                                <select id="gender" name="gender">
+
+                                    <option value="">
+                                        Select gender
+                                    </option>
+
+                                    <option
+                                        value="Male"
+                                        {% if student.gender == "Male" %}selected{% endif %}
+                                    >
+                                        Male
+                                    </option>
+
+                                    <option
+                                        value="Female"
+                                        {% if student.gender == "Female" %}selected{% endif %}
+                                    >
+                                        Female
+                                    </option>
+
+                                    <option
+                                        value="Other"
+                                        {% if student.gender == "Other" %}selected{% endif %}
+                                    >
+                                        Other
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- PHONE -->
+
+                            <div class="profile-form-group">
+
+                                <label for="phone">
+                                    Phone Number
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    value="{{ student.phone or '' }}"
+                                    placeholder="Enter phone number"
+                                >
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ADDRESS -->
+
+                    <div class="profile-section">
+
+                        <h3>
+                            🏠 Address
+                        </h3>
+
+
+                        <div class="profile-form-group">
+
+                            <label for="address">
+                                Address
+                            </label>
+
+                            <textarea
+                                id="address"
+                                name="address"
+                                rows="4"
+                                placeholder="Enter your address"
+                            >{{ student.address or '' }}</textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FORM ACTIONS -->
+
+                    <div class="profile-form-actions">
+
+
+                        <a
+                            href="{{ url_for('student.dashboard') }}"
+                            class="profile-cancel-btn"
+                        >
+                            ← Cancel
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="profile-save-btn"
+                        >
+                            💾 Save Changes
+                        </button>
+
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const courseSelect = document.getElementById("course");
+    const yearSelect = document.getElementById("year");
+
+    const currentYear = "{{ student.year or '' }}";
+
+    const courseYears = {
+
+        "B.Tech": 4,
+
+        "BCA": 3,
+
+        "BBA": 3,
+
+        "B.Com": 3,
+
+        "MCA": 2,
+
+        "MBA": 2
+
+    };
+
+
+    function updateYears() {
+
+        const course = courseSelect.value;
+
+        yearSelect.innerHTML =
+            '<option value="">Select year</option>';
+
+        const totalYears = courseYears[course] || 0;
+
+
+        for (let i = 1; i <= totalYears; i++) {
+
+            const option = document.createElement("option");
+
+            option.value = i;
+
+            option.textContent =
+                i === 1 ? "1st Year" :
+                i === 2 ? "2nd Year" :
+                i === 3 ? "3rd Year" :
+                "4th Year";
+
+            if (String(i) === String(currentYear)) {
+                option.selected = true;
+            }
+
+            yearSelect.appendChild(option);
+        }
+    }
+
+
+    courseSelect.addEventListener(
+        "change",
+        updateYears
+    );
+
+
+    updateYears();
+
+});
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Notices & Announcements | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- STUDENT SIDEBAR -->
+
+    {% include "student/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button class="mobile-menu">
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Notices & Announcements
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Student
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <section class="dashboard-content">
+
+
+            <!-- FLASH MESSAGES -->
+
+            {% include "_flash_messages.html" %}
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Notices & Announcements
+                    </h2>
+
+                    <p>
+                        Stay updated with important hostel announcements.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- NOTICES -->
+
+            <div class="dashboard-section">
+
+
+                {% if notices %}
+
+
+                    <div class="notice-list">
+
+
+                        {% for notice in notices %}
+
+
+                            <article class="notice-card">
+
+
+                                <div class="notice-card-content">
+
+
+                                    <div class="notice-top">
+
+
+                                        <span class="notice-category">
+                                            {{ notice.category }}
+                                        </span>
+
+
+                                        <span class="notice-date">
+
+                                            {{ notice.created_at.strftime("%d %b %Y") }}
+
+                                        </span>
+
+
+                                    </div>
+
+
+                                    <h3>
+                                        {{ notice.title }}
+                                    </h3>
+
+
+                                    <p>
+                                        {{ notice.content }}
+                                    </p>
+
+
+                                </div>
+
+
+                            </article>
+
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                {% else %}
+
+
+                    <!-- EMPTY STATE -->
+
+                    <div class="admin-empty">
+
+
+                        <div class="admin-empty-icon">
+                            📢
+                        </div>
+
+
+                        <h3>
+                            No notices yet
+                        </h3>
+
+
+                        <p>
+                            Important hostel announcements will appear here.
+                        </p>
+
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

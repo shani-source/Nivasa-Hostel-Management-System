@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Add Student | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+<style>
+
+/* ================= BACK TO STUDENTS ================= */
+
+.student-back-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    padding: 11px 18px !important;
+
+    background: #ffffff !important;
+    color: #374151 !important;
+
+    border: 1px solid #d1d5db !important;
+    border-radius: 10px !important;
+
+    text-decoration: none !important;
+
+    font-family: inherit !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+
+    line-height: 1 !important;
+    white-space: nowrap !important;
+
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+}
+
+.student-back-btn:hover {
+    background: #f3f4f6 !important;
+    border-color: #9ca3af !important;
+}
+
+
+/* ================= FORM BUTTONS ================= */
+
+.student-form-actions {
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+
+    gap: 12px !important;
+
+    margin-top: 30px !important;
+    padding-top: 22px !important;
+
+    border-top: 1px solid #e5e7eb !important;
+}
+
+.student-cancel-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-width: 110px !important;
+    padding: 11px 18px !important;
+
+    background: #ffffff !important;
+    color: #374151 !important;
+
+    border: 1px solid #d1d5db !important;
+    border-radius: 10px !important;
+
+    text-decoration: none !important;
+
+    font-family: inherit !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+
+    line-height: 1 !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+}
+
+.student-cancel-btn:hover {
+    background: #f3f4f6 !important;
+}
+
+.student-create-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    min-width: 140px !important;
+    padding: 11px 20px !important;
+
+    background: #0f766e !important;
+    color: #ffffff !important;
+
+    border: none !important;
+    border-radius: 10px !important;
+
+    font-family: inherit !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+
+    line-height: 1 !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+}
+
+.student-create-btn:hover {
+    background: #0d665f !important;
+}
+
+</style>
+
+</head>
+
+<body class="dashboard-body">
+
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    {% include "admin/_sidebar.html" %}
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div>
+                <button
+                    type="button"
+                    class="mobile-menu"
+                >
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Student Management
+                </span>
+            </div>
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="dashboard-content">
+
+            <div class="admin-page-header">
+
+                <div>
+
+                    <h1>
+                        Add New Student 👤
+                    </h1>
+
+                    <p>
+                        Create a student account and profile.
+                    </p>
+
+                </div>
+
+                <a
+                    href="{{ url_for('admin.students') }}"
+                    class="back-btn"
+                >
+                    ← Back to Students
+                </a>
+
+            </div>
+
+
+            <!-- FORM CARD -->
+            <div class="admin-content-card">
+
+                <form
+                    method="POST"
+                    action="{{ url_for('admin.create_student') }}"
+                >
+
+                    <!-- CSRF -->
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}"
+                    >
+
+
+                    <!-- ACCOUNT DETAILS -->
+                    <div class="form-section">
+
+                        <h2>🔐 Account Details</h2>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label for="name">
+                                    Full Name *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    placeholder="Enter student name"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="email">
+                                    Email Address *
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    placeholder="student@example.com"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="password">
+                                    Login Password *
+                                </label>
+
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Minimum 6 characters"
+                                    minlength="6"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACADEMIC DETAILS -->
+                    <div class="form-section">
+
+                        <h2>🎓 Academic Details</h2>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label for="enrollment_no">
+                                    Enrollment Number
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="enrollment_no"
+                                    name="enrollment_no"
+                                    placeholder="Enter enrollment number"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="course">
+                                    Course
+                                </label>
+
+                                <select
+    id="course"
+    name="course"
+    required
+>
+    <option value="">
+        Select Course
+    </option>
+
+    <option value="B.Tech">
+        B.Tech
+    </option>
+
+    <option value="BCA">
+        BCA
+    </option>
+
+    <option value="B.Com">
+        B.Com
+    </option>
+
+    <option value="Other">
+        Other
+    </option>
+</select>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="branch">
+                                    Branch
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="branch"
+                                    name="branch"
+                                    placeholder="e.g. CSE (AI & ML)"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="year">
+                                    Year
+                                </label>
+
+                                <select
+    id="year"
+    name="year"
+    required
+>
+    <option value="">
+        Select Year
+    </option>
+</select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PERSONAL DETAILS -->
+                    <div class="form-section">
+
+                        <h2>📋 Personal Details</h2>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label for="gender">
+                                    Gender
+                                </label>
+
+                                <select
+                                    id="gender"
+                                    name="gender"
+                                >
+
+                                    <option value="">
+                                        Select Gender
+                                    </option>
+
+                                    <option value="Male">
+                                        Male
+                                    </option>
+
+                                    <option value="Female">
+                                        Female
+                                    </option>
+
+                                    <option value="Other">
+                                        Other
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="phone">
+                                    Phone Number
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="Enter phone number"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group full-width">
+
+                                <label for="address">
+                                    Address
+                                </label>
+
+                                <textarea
+                                    id="address"
+                                    name="address"
+                                    placeholder="Enter student's address"
+                                ></textarea>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+                    <div class="form-actions">
+
+                        <a
+                            href="{{ url_for('admin.students') }}"
+                            class="cancel-btn"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="create-btn"
+                        >
+                            Create Student
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+ 
+<script>
+
+const courseSelect = document.getElementById("course");
+const yearSelect = document.getElementById("year");
+
+const courseYears = {
+    "B.Tech": 4,
+    "BCA": 3,
+    "B.Com": 3,
+    "Other": 4
+};
+
+courseSelect.addEventListener("change", function () {
+
+    const course = this.value;
+
+    yearSelect.innerHTML = `
+        <option value="">
+            Select Year
+        </option>
+    `;
+
+    if (!course) {
+        return;
+    }
+
+    const totalYears = courseYears[course] || 4;
+
+    for (let year = 1; year <= totalYears; year++) {
+
+        const option = document.createElement("option");
+
+        option.value = year;
+        option.textContent = `Year ${year}`;
+
+        yearSelect.appendChild(option);
+    }
+
+});
+
+</script>
+
+</body>
+</html>

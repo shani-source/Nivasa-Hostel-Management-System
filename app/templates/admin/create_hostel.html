@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Create Hostel | Nivasa</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body class="dashboard-body">
+
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    {% include "admin/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button class="mobile-menu">
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Create Hostel
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ current_user.name[0]|upper }}
+                </div>
+
+                <span>
+                    {{ current_user.name }}
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="dashboard-content">
+
+            {% include "_flash_messages.html" %}
+
+
+            <!-- PAGE HEADER -->
+            <div class="admin-page-header">
+
+                <div>
+
+                    <h1>
+                        Create Hostel
+                    </h1>
+
+                    <p>
+                        Add a new hostel to Nivasa
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FORM CARD -->
+            <div class="admin-form-card">
+
+                <form method="POST">
+
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}"
+                    >
+
+
+                    <!-- HOSTEL INFORMATION -->
+                    <div class="admin-form-section">
+
+                        <div class="admin-form-section-title">
+                            🏠 Hostel Information
+                        </div>
+
+
+                        <div class="admin-form-grid">
+
+
+                            <!-- HOSTEL NAME -->
+                            <div class="admin-form-group">
+
+                                <label for="name">
+                                    Hostel Name
+                                </label>
+
+                                <input
+                                    id="name"
+                                    type="text"
+                                    name="name"
+                                    placeholder="e.g. Nivasa Boys Hostel"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <!-- WARDEN -->
+                            <div class="admin-form-group">
+
+                                <label for="warden_name">
+                                    Warden Name
+                                </label>
+
+                                <input
+                                    id="warden_name"
+                                    type="text"
+                                    name="warden_name"
+                                    placeholder="Enter warden name"
+                                >
+
+                            </div>
+
+
+                            <!-- HOSTEL TYPE -->
+                            <div class="admin-form-group">
+
+                                <label for="gender">
+                                    Hostel Type
+                                </label>
+
+                                <select
+                                    id="gender"
+                                    name="gender"
+                                >
+
+                                    <option value="">
+                                        Select type
+                                    </option>
+
+                                    <option value="Male">
+                                        Boys
+                                    </option>
+
+                                    <option value="Female">
+                                        Girls
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- LOCATION -->
+                    <div class="admin-form-section">
+
+                        <div class="admin-form-section-title">
+                            📍 Location
+                        </div>
+
+
+                        <div class="admin-form-grid">
+
+                            <div class="admin-form-group full-width">
+
+                                <label for="address">
+                                    Address
+                                </label>
+
+                                <textarea
+                                    id="address"
+                                    name="address"
+                                    rows="4"
+                                    placeholder="Enter hostel address"
+                                ></textarea>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACTIONS -->
+                    <div class="admin-form-actions">
+
+                        <a
+                            href="{{ url_for('admin.dashboard') }}"
+                            class="admin-cancel-btn"
+                        >
+                            Cancel
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="admin-submit-btn"
+                        >
+                            🏠 Create Hostel
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

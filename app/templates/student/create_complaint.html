@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>New Complaint | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- STUDENT SIDEBAR -->
+    {% include "student/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button
+                    type="button"
+                    class="mobile-menu"
+                >
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Submit Complaint
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Student
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="dashboard-content">
+
+
+            <!-- FLASH MESSAGES -->
+            {% include "_flash_messages.html" %}
+
+
+            <!-- PAGE HEADER -->
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        New Complaint
+                    </h1>
+
+                    <p>
+                        Describe the problem and our AI will
+                        automatically classify it.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FORM CARD -->
+            <div class="profile-card">
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for('student.create_complaint') }}"
+                    class="profile-form"
+                >
+
+
+                    <!-- CSRF -->
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}"
+                    >
+
+
+                    <!-- COMPLAINT DETAILS -->
+                    <div class="profile-section">
+
+                        <h3>
+                            📝 Complaint Details
+                        </h3>
+
+
+                        <p style="
+                            margin-top: 5px;
+                            margin-bottom: 20px;
+                            color: var(--muted);
+                            font-size: 13px;
+                        ">
+                            Provide a clear title and description
+                            so the complaint can be processed correctly.
+                        </p>
+
+
+                        <!-- TITLE -->
+                        <div class="profile-form-group">
+
+                            <label for="title">
+                                Complaint Title
+                            </label>
+
+                            <input
+                                type="text"
+                                id="title"
+                                name="title"
+                                placeholder="e.g. Water leakage in bathroom"
+                                maxlength="200"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+                        <div
+                            class="profile-form-group"
+                            style="margin-top: 18px;"
+                        >
+
+                            <label for="description">
+                                Description
+                            </label>
+
+                            <textarea
+                                id="description"
+                                name="description"
+                                rows="7"
+                                placeholder="Describe the issue in detail..."
+                                required
+                            ></textarea>
+
+                            <span style="
+                                color: var(--muted);
+                                font-size: 11px;
+                            ">
+                                Mention the location and important details
+                                about the problem.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- AI INFORMATION -->
+                    <div
+                        class="dashboard-card"
+                        style="
+                            margin-top: 0;
+                            background: var(--surface-soft);
+                        "
+                    >
+
+                        <div
+                            style="
+                                display: flex;
+                                align-items: flex-start;
+                                gap: 12px;
+                            "
+                        >
+
+                            <div
+                                style="
+                                    width: 42px;
+                                    height: 42px;
+                                    flex-shrink: 0;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    background: var(--primary-light);
+                                    border-radius: 12px;
+                                    font-size: 20px;
+                                "
+                            >
+                                🤖
+                            </div>
+
+
+                            <div>
+
+                                <strong
+                                    style="
+                                        display: block;
+                                        margin-bottom: 5px;
+                                        color: var(--dark);
+                                        font-size: 14px;
+                                    "
+                                >
+                                    AI Classification
+                                </strong>
+
+
+                                <span
+                                    style="
+                                        color: var(--muted);
+                                        font-size: 12px;
+                                        line-height: 1.6;
+                                    "
+                                >
+                                    Nivasa AI will automatically identify
+                                    the complaint category and priority
+                                    after you submit it.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACTIONS -->
+                    <div class="profile-form-actions">
+
+
+                        <a
+                            href="{{ url_for('student.complaints') }}"
+                            class="profile-cancel-btn"
+                        >
+                            ← Cancel
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="profile-save-btn"
+                        >
+                            📝 Submit Complaint
+                        </button>
+
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

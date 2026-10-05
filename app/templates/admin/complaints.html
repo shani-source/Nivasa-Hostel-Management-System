@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Complaints | Nivasa Admin</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body class="dashboard-body">
+
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    {% include "admin/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button class="mobile-menu">
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Complaint Management
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <span>
+                    {{ user.name }}
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="dashboard-content">
+
+            {% include "_flash_messages.html" %}
+
+
+            <!-- PAGE HEADER -->
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        All Complaints
+                    </h2>
+
+                    <p>
+                        Review and manage AI-classified student complaints
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if complaints %}
+
+                <div class="admin-complaint-list">
+
+                    {% for complaint in complaints %}
+
+                        <div class="admin-complaint-card">
+
+
+                            <!-- COMPLAINT HEADER -->
+                            <div class="admin-complaint-header">
+
+                                <div>
+
+                                    <h3 class="admin-complaint-title">
+                                        {{ complaint.title }}
+                                    </h3>
+
+                                    <p class="admin-complaint-student">
+                                        Submitted by
+                                        <strong>
+                                            {{ complaint.student.user.name }}
+                                        </strong>
+                                    </p>
+
+                                </div>
+
+
+                                <span class="status-badge">
+                                    {{ complaint.status }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- DESCRIPTION -->
+                            <div class="admin-complaint-description">
+
+                                {{ complaint.description }}
+
+                            </div>
+
+
+                            <!-- COMPLAINT META -->
+                            <div class="admin-complaint-meta">
+
+                                <span class="admin-meta-tag">
+                                    🤖 Category:
+                                    {{ complaint.category }}
+                                </span>
+
+
+                                <span class="admin-meta-tag">
+                                    🎯 Confidence:
+                                    {{ complaint.ai_confidence or 0 }}%
+                                </span>
+
+
+                                <span class="admin-meta-tag">
+                                    ⚡ Priority:
+                                    {{ complaint.priority }}
+                                </span>
+
+
+                                <span class="admin-meta-tag">
+                                    📅
+                                    {{ complaint.created_at.strftime("%d %b %Y") }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- STATUS UPDATE -->
+                            <form
+                                method="POST"
+                                action="{{ url_for(
+                                    'admin.update_complaint_status',
+                                    complaint_id=complaint.id
+                                ) }}"
+                                class="status-update-form"
+                            >
+
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}"
+                                >
+
+
+                                <select name="status">
+
+                                    <option
+                                        value="Pending"
+                                        {% if complaint.status == "Pending" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Pending
+                                    </option>
+
+
+                                    <option
+                                        value="In Progress"
+                                        {% if complaint.status == "In Progress" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        In Progress
+                                    </option>
+
+
+                                    <option
+                                        value="Resolved"
+                                        {% if complaint.status == "Resolved" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Resolved
+                                    </option>
+
+                                </select>
+
+
+                                <button
+                                    type="submit"
+                                    class="status-update-btn"
+                                >
+                                    Update Status
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+            {% else %}
+
+                <div class="admin-empty">
+
+                    <div class="admin-empty-icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        No complaints
+                    </h3>
+
+                    <p>
+                        There are currently no student complaints.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

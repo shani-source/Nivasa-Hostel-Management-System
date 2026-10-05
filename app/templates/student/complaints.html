@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Complaints | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- STUDENT SIDEBAR -->
+    {% include "student/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button
+                    type="button"
+                    class="mobile-menu"
+                >
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    My Complaints
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ current_user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ current_user.name }}
+                    </strong>
+
+                    <small>
+                        Student
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="dashboard-content">
+
+
+            <!-- FLASH MESSAGES -->
+            {% include "_flash_messages.html" %}
+
+
+            <!-- PAGE HEADER -->
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        My Complaints
+                    </h1>
+
+                    <p>
+                        View the status of your submitted complaints.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('student.create_complaint') }}"
+                    class="page-primary-btn"
+                >
+                    + New Complaint
+                </a>
+
+            </div>
+
+
+            {% if complaints %}
+
+
+                <!-- COMPLAINT LIST -->
+                <div class="complaints-list">
+
+
+                    {% for complaint in complaints %}
+
+
+                        <div class="complaint-card">
+
+
+                            <!-- COMPLAINT TOP -->
+                            <div class="complaint-top">
+
+
+                                <div class="complaint-main">
+
+
+                                    <!-- TITLE -->
+                                    <h3 class="complaint-title">
+
+                                        {{ complaint.title }}
+
+                                    </h3>
+
+
+                                    <!-- DESCRIPTION -->
+                                    <div class="complaint-description">
+
+                                        {{ complaint.description }}
+
+                                    </div>
+
+
+                                </div>
+
+
+                                <!-- STATUS -->
+                                {% if complaint.status == "Pending" %}
+
+                                    <span class="status-badge status-pending">
+                                        Pending
+                                    </span>
+
+                                {% elif complaint.status == "In Progress" %}
+
+                                    <span class="status-badge status-in-progress">
+                                        In Progress
+                                    </span>
+
+                                {% elif complaint.status == "Resolved" %}
+
+                                    <span class="status-badge status-resolved">
+                                        Resolved
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status-badge">
+                                        {{ complaint.status }}
+                                    </span>
+
+                                {% endif %}
+
+
+                            </div>
+<!-- COMPLAINT META -->
+<div class="complaint-meta">
+
+    <span class="complaint-meta-item">
+        🏷️ Category: {{ complaint.category }}
+    </span>
+
+    <span class="complaint-meta-item">
+        ⚡ Priority: {{ complaint.priority }}
+    </span>
+
+    {% if complaint.ai_confidence is not none %}
+        <span class="complaint-meta-item">
+            🤖 AI Confidence: {{ "%.0f"|format(complaint.ai_confidence) }}%
+        </span>
+    {% endif %}
+
+    <span class="complaint-meta-item">
+        📅 {{ complaint.created_at.strftime("%d %b %Y") }}
+    </span>
+
+</div>
+
+                            
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- EMPTY STATE -->
+                <div class="admin-empty">
+
+
+                    <div class="admin-empty-icon">
+                        📝
+                    </div>
+
+
+                    <h3>
+                        No complaints yet
+                    </h3>
+
+
+                    <p>
+                        You haven't submitted any complaints.
+                    </p>
+
+
+                    <a
+                        href="{{ url_for('student.create_complaint') }}"
+                        class="page-primary-btn"
+                    >
+                        Submit Your First Complaint
+                    </a>
+
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

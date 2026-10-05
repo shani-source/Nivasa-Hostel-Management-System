@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- STUDENT SIDEBAR -->
+
+    {% include "student/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button class="mobile-menu">
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    My Profile
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Student
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PROFILE CONTENT -->
+
+        <section class="dashboard-content">
+
+
+            <!-- FLASH MESSAGES -->
+
+            {% include "_flash_messages.html" %}
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        My Profile
+                    </h2>
+
+                    <p>
+                        View and manage your personal information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- PROFILE CARD -->
+
+            <div class="profile-card">
+
+
+                <!-- PROFILE HEADER -->
+
+                <div class="profile-header">
+
+
+                    <div class="profile-avatar">
+                        {{ user.name[0]|upper }}
+                    </div>
+
+
+                    <div>
+
+                        <h1>
+                            {{ user.name }}
+                        </h1>
+
+                        <p>
+                            {{ user.email }}
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- PERSONAL INFORMATION -->
+
+                <div class="profile-section">
+
+                    <h3>
+                        👤 Personal Information
+                    </h3>
+
+
+                    <div class="profile-grid">
+
+
+                        <div class="profile-field">
+
+                            <span>
+                                Name
+                            </span>
+
+                            <strong>
+                                {{ user.name }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-field">
+
+                            <span>
+                                Email
+                            </span>
+
+                            <strong>
+                                {{ user.email }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-field">
+
+                            <span>
+                                Phone
+                            </span>
+
+                            <strong>
+                                {{ student.phone or "Not added" }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-field">
+
+                            <span>
+                                Gender
+                            </span>
+
+                            <strong>
+                                {{ student.gender or "Not added" }}
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACADEMIC INFORMATION -->
+
+                <div class="profile-section">
+
+                    <h3>
+                        🎓 Academic Information
+                    </h3>
+
+
+                    <div class="profile-grid">
+
+
+                        <div class="profile-field">
+
+                            <span>
+                                Enrollment Number
+                            </span>
+
+                            <strong>
+                                {{ student.enrollment_no or "Not added" }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-field">
+
+                            <span>
+                                Course
+                            </span>
+
+                            <strong>
+                                {{ student.course or "Not added" }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-field">
+
+                            <span>
+                                Branch
+                            </span>
+
+                            <strong>
+                                {{ student.branch or "Not added" }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-field">
+
+                            <span>
+                                Year
+                            </span>
+
+                            <strong>
+
+                                {% if student.year %}
+
+                                    {{ student.year }}{{ "st" if student.year == 1 else "nd" if student.year == 2 else "rd" if student.year == 3 else "th" }} Year
+
+                                {% else %}
+
+                                    Not added
+
+                                {% endif %}
+
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- ADDRESS -->
+
+                <div class="profile-section">
+
+                    <h3>
+                        🏠 Address
+                    </h3>
+
+
+                    <div class="profile-address">
+
+                        {{ student.address or "Address not added yet." }}
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ACTION -->
+
+                <div class="profile-form-actions">
+
+                    <a
+                        href="{{ url_for('student.edit_profile') }}"
+                        class="profile-save-btn"
+                    >
+                        ✏️ Edit Profile
+                    </a>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

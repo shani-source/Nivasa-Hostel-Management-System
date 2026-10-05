@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Leave Management | Nivasa</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+    {% include "admin/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button class="mobile-menu">
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Leave Management
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="dashboard-content">
+
+
+            {% include "_flash_messages.html" %}
+
+
+            <!-- PAGE HEADER -->
+            <div class="admin-page-header">
+
+                <div>
+
+                    <h1>
+                        Student Leave Requests
+                    </h1>
+
+                    <p>
+                        Review, approve or reject submitted applications.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if leave_requests %}
+
+
+                <!-- LEAVE REQUEST LIST -->
+                <div class="admin-leave-list">
+
+
+                    {% for leave in leave_requests %}
+
+
+                        <div class="admin-leave-card">
+
+
+                            <!-- HEADER -->
+                            <div class="admin-leave-header">
+
+                                <div>
+
+                                    <h3 class="admin-leave-title">
+                                        {{ leave.student.user.name }}
+                                    </h3>
+
+                                    <p class="admin-leave-student">
+                                        {{ leave.student.enrollment_no
+                                           or "No enrollment number" }}
+                                    </p>
+
+                                </div>
+
+
+                                <span class="status-badge">
+
+                                    {{ leave.status }}
+
+                                </span>
+
+                            </div>
+
+
+                            <!-- LEAVE DETAILS -->
+                            <div class="admin-leave-description">
+
+                                <strong>
+
+                                    {{ leave.from_date.strftime("%d %b %Y") }}
+
+                                    —
+
+                                    {{ leave.to_date.strftime("%d %b %Y") }}
+
+                                </strong>
+
+
+                                <p>
+                                    {{ leave.reason }}
+                                </p>
+
+                            </div>
+
+
+                            <!-- STATUS UPDATE -->
+                            <form
+                                method="POST"
+                                action="{{ url_for(
+                                    'admin.update_leave_status',
+                                    leave_id=leave.id
+                                ) }}"
+                                class="status-update-form"
+                            >
+
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}"
+                                >
+
+
+                                <div class="admin-form-group">
+
+                                    <label for="status-{{ leave.id }}">
+                                        Status
+                                    </label>
+
+                                    <select
+                                        id="status-{{ leave.id }}"
+                                        name="status"
+                                    >
+
+                                        <option
+                                            value="Pending"
+                                            {% if leave.status == "Pending" %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            Pending
+                                        </option>
+
+
+                                        <option
+                                            value="Approved"
+                                            {% if leave.status == "Approved" %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            Approved
+                                        </option>
+
+
+                                        <option
+                                            value="Rejected"
+                                            {% if leave.status == "Rejected" %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            Rejected
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="admin-form-group">
+
+                                    <label for="remark-{{ leave.id }}">
+                                        Admin Remark
+                                    </label>
+
+                                    <input
+                                        id="remark-{{ leave.id }}"
+                                        type="text"
+                                        name="admin_remark"
+                                        placeholder="Optional remark"
+                                        value="{{ leave.admin_remark or '' }}"
+                                    >
+
+                                </div>
+
+
+                                <button
+                                    type="submit"
+                                    class="status-update-btn"
+                                >
+                                    Update Status
+                                </button>
+
+
+                            </form>
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- EMPTY STATE -->
+                <div class="admin-empty">
+
+                    <div class="admin-empty-icon">
+                        📅
+                    </div>
+
+                    <h3>
+                        No leave requests
+                    </h3>
+
+                    <p>
+                        There are currently no student leave requests.
+                    </p>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

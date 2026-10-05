@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+    {% include "admin/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button
+                    type="button"
+                    class="mobile-menu"
+                >
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Admin Dashboard
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="dashboard-content">
+
+
+            <!-- ADMIN DASHBOARD WRAPPER -->
+            <div class="admin-dashboard">
+
+
+                <!-- WELCOME -->
+                <div class="admin-welcome">
+
+                    <div class="admin-welcome-content">
+
+                        <h1>
+                            Welcome, {{ user.name }} 👋
+                        </h1>
+
+                        <p>
+                            Here's what's happening across your hostel.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STAT CARDS -->
+                <div class="admin-stats">
+
+
+                    <!-- HOSTELS -->
+                    <a
+                        href="{{ url_for('admin.hostels') }}"
+                        class="admin-stat-card"
+                    >
+
+                        <div class="admin-stat-icon">
+                            🏠
+                        </div>
+
+                        <div class="admin-stat-info">
+
+                            <strong>
+                                {{ hostels|length }}
+                            </strong>
+
+                            <span>
+                                Hostels
+                            </span>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- ROOMS -->
+                    <a
+                        href="{{ url_for('admin.rooms') }}"
+                        class="admin-stat-card"
+                    >
+
+                        <div class="admin-stat-icon">
+                            🛏️
+                        </div>
+
+                        <div class="admin-stat-info">
+
+                            <strong>
+                                {{ rooms|length }}
+                            </strong>
+
+                            <span>
+                                Total Rooms
+                            </span>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- STUDENTS -->
+                    <a
+                        href="{{ url_for('admin.students') }}"
+                        class="admin-stat-card"
+                    >
+
+                        <div class="admin-stat-icon">
+                            👥
+                        </div>
+
+                        <div class="admin-stat-info">
+
+                            <strong>
+                                {{ students|length }}
+                            </strong>
+
+                            <span>
+                                Students
+                            </span>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- COMPLAINTS -->
+                    <a
+                        href="{{ url_for('admin.complaints') }}"
+                        class="admin-stat-card"
+                    >
+
+                        <div class="admin-stat-icon">
+                            📝
+                        </div>
+
+                        <div class="admin-stat-info">
+
+                            <strong>
+                                {{ complaints|length }}
+                            </strong>
+
+                            <span>
+                                Complaints
+                            </span>
+
+                        </div>
+
+                    </a>
+
+
+                </div>
+
+
+                <!-- HOSTELS SECTION -->
+                <section class="admin-section">
+
+
+                    <!-- SECTION HEADER -->
+                    <div class="admin-section-header">
+
+                        <div>
+
+                            <h2>
+                                Hostels
+                            </h2>
+
+                            <p>
+                                Currently registered hostels
+                            </p>
+
+                        </div>
+
+
+                        <!-- QUICK ACTIONS -->
+                        <div class="admin-quick-actions">
+
+
+                            <a
+                                href="{{ url_for('admin.create_hostel') }}"
+                                class="admin-action-btn"
+                            >
+
+                                🏠
+
+                                <span>
+                                    Add Hostel
+                                </span>
+
+                            </a>
+
+
+                            <a
+                                href="{{ url_for('admin.create_room') }}"
+                                class="admin-action-btn"
+                            >
+
+                                🛏️
+
+                                <span>
+                                    Add Room
+                                </span>
+
+                            </a>
+
+
+                            <a
+                                href="{{ url_for('admin.create_allocation') }}"
+                                class="admin-action-btn"
+                            >
+
+                                👥
+
+                                <span>
+                                    Allocate Room
+                                </span>
+
+                            </a>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- HOSTEL CARDS -->
+                    {% if hostels %}
+
+                        <div class="hostel-grid">
+
+                            {% for hostel in hostels %}
+
+                                <div class="hostel-card">
+
+
+                                    <!-- CARD HEADER -->
+                                    <div class="hostel-card-header">
+
+                                        <div class="hostel-card-icon">
+                                            🏠
+                                        </div>
+
+                                        <div>
+
+                                            <h3>
+                                                {{ hostel.name }}
+                                            </h3>
+
+                                            <span>
+                                                {{ hostel.gender or "All" }}
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- DETAILS -->
+                                    <div class="hostel-card-details">
+
+
+                                        <div class="hostel-detail">
+
+                                            <span>
+                                                Warden
+                                            </span>
+
+                                            <strong>
+                                                {{ hostel.warden_name or "Not assigned" }}
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div class="hostel-detail">
+
+                                            <span>
+                                                Address
+                                            </span>
+
+                                            <strong>
+                                                {{ hostel.address or "Not provided" }}
+                                            </strong>
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                    <!-- VIEW BUTTON -->
+                                    <a
+                                        href="{{ url_for('admin.hostels') }}"
+                                        class="admin-secondary-btn"
+                                    >
+                                        View Hostel →
+                                    </a>
+
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                    {% else %}
+
+                        <!-- EMPTY STATE -->
+                        <div class="admin-empty">
+
+                            <div class="admin-empty-icon">
+                                🏠
+                            </div>
+
+                            <h3>
+                                No hostels yet
+                            </h3>
+
+                            <p>
+                                Create your first hostel to start
+                                managing rooms.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+
+                </section>
+
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

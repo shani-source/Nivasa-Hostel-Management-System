@@ -1,0 +1,594 @@
+<aside class="sidebar">
+
+    <div class="sidebar-logo">
+        🏠 <span>Nivasa</span>
+    </div>
+
+    <nav class="sidebar-nav">
+
+        <a href="{{ url_for('student.dashboard') }}"
+           class="sidebar-link {% if request.endpoint == 'student.dashboard' %}active{% endif %}">
+            📊 Dashboard
+        </a>
+
+        <a href="{{ url_for('student.edit_profile') }}"
+           class="sidebar-link {% if request.endpoint == 'student.edit_profile' %}active{% endif %}">
+            👤 My Profile
+        </a>
+
+        <a href="{{ url_for('student.my_room') }}"
+           class="sidebar-link {% if request.endpoint == 'student.my_room' %}active{% endif %}">
+            🛏️ My Room
+        </a>
+
+        <a href="{{ url_for('student.complaints') }}"
+           class="sidebar-link {% if request.endpoint == 'student.complaints' %}active{% endif %}">
+            📝 Complaints
+        </a>
+
+        <a href="{{ url_for('student.leave') }}"
+           class="sidebar-link {% if request.endpoint == 'student.leave' %}active{% endif %}">
+            📅 Leave
+        </a>
+
+        <a href="{{ url_for('student.fees') }}"
+           class="sidebar-link {% if request.endpoint == 'student.fees' %}active{% endif %}">
+            💳 Fees
+        </a>
+
+        <a href="{{ url_for('student.notices') }}"
+           class="sidebar-link {% if request.endpoint == 'student.notices' %}active{% endif %}">
+            📢 Notices
+        </a>
+
+        <a href="{{ url_for('student.assistant') }}"
+           class="sidebar-link {% if request.endpoint == 'student.assistant' %}active{% endif %}">
+            🤖 AI Assistant
+        </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+        <a href="{{ url_for('auth.logout') }}"
+           class="sidebar-link logout-link">
+            🚪 Logout
+        </a>
+
+    </div>
+
+</aside>
+
+
+<!-- =========================================================
+     TOPBAR DROPDOWN FUNCTIONALITY
+     ========================================================= -->
+
+<style>
+
+    /* Make the topbar dropdown position correctly */
+    .user-menu {
+        position: relative;
+    }
+
+    /* Make avatar clickable */
+    .user-avatar {
+        cursor: pointer;
+        transition: 0.2s ease;
+        user-select: none;
+    }
+
+    .user-avatar:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(15, 76, 92, 0.25);
+    }
+
+    /* Notification clickable */
+    .notification {
+        position: relative;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    /* Small notification indicator */
+    .notification-dot {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+
+        width: 7px;
+        height: 7px;
+
+        background: #ef4444;
+        border: 2px solid white;
+        border-radius: 50%;
+    }
+
+    /* Common dropdown */
+    .topbar-dropdown {
+        position: absolute;
+
+        top: 52px;
+        right: 0;
+
+        width: 280px;
+
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 14px;
+
+        box-shadow:
+            0 15px 40px rgba(15, 23, 42, 0.14);
+
+        overflow: hidden;
+
+        z-index: 5000;
+
+        display: none;
+
+        animation: dropdownFade 0.15s ease;
+    }
+
+    .topbar-dropdown.show {
+        display: block;
+    }
+
+    @keyframes dropdownFade {
+
+        from {
+            opacity: 0;
+            transform: translateY(-5px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+    /* Dropdown header */
+    .dropdown-header {
+        padding: 16px 18px;
+
+        border-bottom: 1px solid var(--border);
+
+        background: var(--surface-soft);
+    }
+
+    .dropdown-header strong {
+        display: block;
+
+        color: var(--dark);
+
+        font-size: 14px;
+    }
+
+    .dropdown-header span {
+        display: block;
+
+        margin-top: 3px;
+
+        color: var(--muted);
+
+        font-size: 12px;
+    }
+
+    /* Dropdown items */
+    .dropdown-item {
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        padding: 13px 17px;
+
+        color: var(--text);
+
+        text-decoration: none;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+        transition: 0.15s ease;
+
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .dropdown-item:hover {
+        background: var(--primary-light);
+
+        color: var(--primary);
+    }
+
+    .dropdown-item-icon {
+        width: 32px;
+        height: 32px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 9px;
+
+        background: var(--surface-soft);
+
+        font-size: 16px;
+
+        flex-shrink: 0;
+    }
+
+    .dropdown-item-text {
+        flex: 1;
+    }
+
+    .dropdown-item-text strong {
+        display: block;
+
+        font-size: 13px;
+
+        color: var(--dark);
+    }
+
+    .dropdown-item-text small {
+        display: block;
+
+        margin-top: 2px;
+
+        color: var(--muted);
+
+        font-size: 11px;
+
+        font-weight: 500;
+    }
+
+    /* Logout item */
+    .dropdown-logout {
+        color: #dc2626;
+    }
+
+    .dropdown-logout:hover {
+        background: #fef2f2;
+
+        color: #b91c1c;
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+
+        .topbar-dropdown {
+            position: fixed;
+
+            top: 68px;
+            right: 12px;
+
+            width: min(280px, calc(100vw - 24px));
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const notification = document.querySelector(".notification");
+    const avatar = document.querySelector(".user-avatar");
+    const userMenu = document.querySelector(".user-menu");
+
+    if (!userMenu) {
+        return;
+    }
+
+
+    /* =====================================================
+       NOTIFICATION DROPDOWN
+       ===================================================== */
+
+    if (notification) {
+
+        const notificationDropdown =
+            document.createElement("div");
+
+        notificationDropdown.className =
+            "topbar-dropdown";
+
+        notificationDropdown.id =
+            "notificationDropdown";
+
+        notificationDropdown.innerHTML = `
+
+            <div class="dropdown-header">
+
+                <strong>Notifications</strong>
+
+                <span>Important hostel updates</span>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('student.notices') }}"
+                class="dropdown-item"
+            >
+
+                <div class="dropdown-item-icon">
+                    📢
+                </div>
+
+                <div class="dropdown-item-text">
+
+                    <strong>Hostel Notices</strong>
+
+                    <small>
+                        View the latest announcements
+                    </small>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('student.complaints') }}"
+                class="dropdown-item"
+            >
+
+                <div class="dropdown-item-icon">
+                    📝
+                </div>
+
+                <div class="dropdown-item-text">
+
+                    <strong>Complaint Updates</strong>
+
+                    <small>
+                        Check your complaint status
+                    </small>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('student.leave') }}"
+                class="dropdown-item"
+            >
+
+                <div class="dropdown-item-icon">
+                    📅
+                </div>
+
+                <div class="dropdown-item-text">
+
+                    <strong>Leave Requests</strong>
+
+                    <small>
+                        Check your leave status
+                    </small>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('student.fees') }}"
+                class="dropdown-item"
+            >
+
+                <div class="dropdown-item-icon">
+                    💳
+                </div>
+
+                <div class="dropdown-item-text">
+
+                    <strong>Fee Status</strong>
+
+                    <small>
+                        Check pending or paid fees
+                    </small>
+
+                </div>
+
+            </a>
+
+        `;
+
+        userMenu.appendChild(notificationDropdown);
+
+
+        /* Notification indicator */
+
+        const dot = document.createElement("span");
+
+        dot.className = "notification-dot";
+
+        notification.appendChild(dot);
+
+
+        notification.addEventListener("click", function (event) {
+
+            event.stopPropagation();
+
+            notificationDropdown.classList.toggle("show");
+
+            if (profileDropdown) {
+                profileDropdown.classList.remove("show");
+            }
+
+        });
+
+    }
+
+
+    /* =====================================================
+       PROFILE DROPDOWN
+       ===================================================== */
+
+    let profileDropdown = null;
+
+    if (avatar) {
+
+        profileDropdown =
+            document.createElement("div");
+
+        profileDropdown.className =
+            "topbar-dropdown";
+
+        profileDropdown.id =
+            "profileDropdown";
+
+        profileDropdown.innerHTML = `
+
+            <div class="dropdown-header">
+
+                <strong>
+                    {{ current_user.name }}
+                </strong>
+
+                <span>
+                    Student Account
+                </span>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('student.edit_profile') }}"
+                class="dropdown-item"
+            >
+
+                <div class="dropdown-item-icon">
+                    👤
+                </div>
+
+                <div class="dropdown-item-text">
+
+                    <strong>My Profile</strong>
+
+                    <small>
+                        View and edit your information
+                    </small>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('student.my_room') }}"
+                class="dropdown-item"
+            >
+
+                <div class="dropdown-item-icon">
+                    🛏️
+                </div>
+
+                <div class="dropdown-item-text">
+
+                    <strong>My Room</strong>
+
+                    <small>
+                        View room details
+                    </small>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('auth.logout') }}"
+                class="dropdown-item dropdown-logout"
+            >
+
+                <div class="dropdown-item-icon">
+                    🚪
+                </div>
+
+                <div class="dropdown-item-text">
+
+                    <strong>Logout</strong>
+
+                    <small>
+                        Sign out of Nivasa
+                    </small>
+
+                </div>
+
+            </a>
+
+        `;
+
+        userMenu.appendChild(profileDropdown);
+
+
+        avatar.addEventListener("click", function (event) {
+
+            event.stopPropagation();
+
+            profileDropdown.classList.toggle("show");
+
+            const notificationDropdown =
+                document.getElementById(
+                    "notificationDropdown"
+                );
+
+            if (notificationDropdown) {
+                notificationDropdown.classList.remove("show");
+            }
+
+        });
+
+    }
+
+
+    /* =====================================================
+       CLOSE DROPDOWNS WHEN CLICKING OUTSIDE
+       ===================================================== */
+
+    document.addEventListener("click", function () {
+
+        const notificationDropdown =
+            document.getElementById(
+                "notificationDropdown"
+            );
+
+        const profileDropdown =
+            document.getElementById(
+                "profileDropdown"
+            );
+
+        if (notificationDropdown) {
+            notificationDropdown.classList.remove("show");
+        }
+
+        if (profileDropdown) {
+            profileDropdown.classList.remove("show");
+        }
+
+    });
+
+
+    /* Prevent dropdown clicks from closing themselves */
+
+    document.addEventListener("click", function (event) {
+
+        if (event.target.closest(".topbar-dropdown")) {
+            event.stopPropagation();
+        }
+
+    }, true);
+
+});
+
+</script>

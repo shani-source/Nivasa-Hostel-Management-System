@@ -1,0 +1,597 @@
+<aside class="sidebar">
+
+    <div class="sidebar-logo">
+        🏠 <span>Nivasa</span>
+    </div>
+
+    <nav class="sidebar-nav">
+
+        <a href="{{ url_for('admin.dashboard') }}"
+           class="sidebar-link {% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
+            📊 Dashboard
+        </a>
+
+        <a href="{{ url_for('admin.hostels') }}"
+           class="sidebar-link {% if request.endpoint in ['admin.hostels', 'admin.create_hostel'] %}active{% endif %}">
+            🏠 Hostels
+        </a>
+
+        <a href="{{ url_for('admin.rooms') }}"
+           class="sidebar-link {% if request.endpoint in ['admin.rooms', 'admin.create_room'] %}active{% endif %}">
+            🛏️ Rooms
+        </a>
+
+        <a href="{{ url_for('admin.create_allocation') }}"
+           class="sidebar-link {% if request.endpoint == 'admin.create_allocation' %}active{% endif %}">
+            👥 Allocate Room
+        </a>
+
+        <a href="{{ url_for('admin.complaints') }}"
+           class="sidebar-link {% if request.endpoint == 'admin.complaints' %}active{% endif %}">
+            📝 Complaints
+        </a>
+
+        <a href="{{ url_for('admin.leave_requests') }}"
+           class="sidebar-link {% if request.endpoint == 'admin.leave_requests' %}active{% endif %}">
+            📅 Leave Requests
+        </a>
+
+        <a href="{{ url_for('admin.fees') }}"
+           class="sidebar-link {% if request.endpoint in ['admin.fees', 'admin.create_fee'] %}active{% endif %}">
+            💳 Fees
+        </a>
+
+        <a href="{{ url_for('admin.notices') }}"
+           class="sidebar-link {% if request.endpoint in ['admin.notices', 'admin.create_notice'] %}active{% endif %}">
+            📢 Notices
+        </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+        <a href="{{ url_for('auth.logout') }}"
+           class="sidebar-link logout-link">
+            🚪 Logout
+        </a>
+
+    </div>
+
+</aside>
+
+
+<!-- =========================================================
+     ADMIN TOPBAR DROPDOWNS
+     ========================================================= -->
+
+<style>
+
+    .user-menu {
+        position: relative;
+    }
+
+    .notification {
+        position: relative;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .user-avatar {
+        cursor: pointer;
+        transition: 0.2s ease;
+        user-select: none;
+    }
+
+    .user-avatar:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(15, 76, 92, 0.25);
+    }
+
+    .topbar-dropdown {
+        position: absolute;
+
+        top: 52px;
+        right: 0;
+
+        width: 285px;
+
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 14px;
+
+        box-shadow:
+            0 15px 40px rgba(15, 23, 42, 0.14);
+
+        overflow: hidden;
+
+        z-index: 5000;
+
+        display: none;
+
+        animation: adminDropdownFade 0.15s ease;
+    }
+
+    .topbar-dropdown.show {
+        display: block;
+    }
+
+    @keyframes adminDropdownFade {
+
+        from {
+            opacity: 0;
+            transform: translateY(-5px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+    .dropdown-header {
+        padding: 16px 18px;
+
+        border-bottom: 1px solid var(--border);
+
+        background: var(--surface-soft);
+    }
+
+    .dropdown-header strong {
+        display: block;
+
+        color: var(--dark);
+
+        font-size: 14px;
+    }
+
+    .dropdown-header span {
+        display: block;
+
+        margin-top: 3px;
+
+        color: var(--muted);
+
+        font-size: 12px;
+    }
+
+    .dropdown-item {
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        padding: 13px 17px;
+
+        color: var(--text);
+
+        text-decoration: none;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+        transition: 0.15s ease;
+
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .dropdown-item:hover {
+        background: var(--primary-light);
+
+        color: var(--primary);
+    }
+
+    .dropdown-item-icon {
+        width: 34px;
+        height: 34px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 9px;
+
+        background: var(--surface-soft);
+
+        font-size: 16px;
+
+        flex-shrink: 0;
+    }
+
+    .dropdown-item-text {
+        flex: 1;
+    }
+
+    .dropdown-item-text strong {
+        display: block;
+
+        font-size: 13px;
+
+        color: var(--dark);
+    }
+
+    .dropdown-item-text small {
+        display: block;
+
+        margin-top: 2px;
+
+        color: var(--muted);
+
+        font-size: 11px;
+
+        font-weight: 500;
+    }
+
+    .dropdown-logout {
+        color: #dc2626;
+    }
+
+    .dropdown-logout:hover {
+        background: #fef2f2;
+
+        color: #b91c1c;
+    }
+
+    @media (max-width: 600px) {
+
+        .topbar-dropdown {
+            position: fixed;
+
+            top: 68px;
+            right: 12px;
+
+            width: min(285px, calc(100vw - 24px));
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const notification =
+        document.querySelector(".notification");
+
+    const avatar =
+        document.querySelector(".user-avatar");
+
+    const userMenu =
+        document.querySelector(".user-menu");
+
+
+    if (!userMenu) {
+        return;
+    }
+
+
+    /* =====================================================
+       NOTIFICATION DROPDOWN
+       ===================================================== */
+
+    let notificationDropdown = null;
+
+    if (notification) {
+
+        notificationDropdown =
+            document.createElement("div");
+
+        notificationDropdown.className =
+            "topbar-dropdown";
+
+        notificationDropdown.id =
+            "adminNotificationDropdown";
+
+        notificationDropdown.innerHTML = `
+
+            <div class="dropdown-header">
+
+                <strong>Admin Notifications</strong>
+
+                <span>
+                    Important hostel management areas
+                </span>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('admin.complaints') }}"
+                class="dropdown-item"
+            >
+
+                <div class="dropdown-item-icon">
+                    📝
+                </div>
+
+                <div class="dropdown-item-text">
+
+                    <strong>Complaints</strong>
+
+                    <small>
+                        Review and update complaints
+                    </small>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('admin.leave_requests') }}"
+                class="dropdown-item"
+            >
+
+                <div class="dropdown-item-icon">
+                    📅
+                </div>
+
+                <div class="dropdown-item-text">
+
+                    <strong>Leave Requests</strong>
+
+                    <small>
+                        Review student leave requests
+                    </small>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('admin.fees') }}"
+                class="dropdown-item"
+            >
+
+                <div class="dropdown-item-icon">
+                    💳
+                </div>
+
+                <div class="dropdown-item-text">
+
+                    <strong>Fee Management</strong>
+
+                    <small>
+                        Manage student fee records
+                    </small>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('admin.notices') }}"
+                class="dropdown-item"
+            >
+
+                <div class="dropdown-item-icon">
+                    📢
+                </div>
+
+                <div class="dropdown-item-text">
+
+                    <strong>Notices</strong>
+
+                    <small>
+                        Manage hostel announcements
+                    </small>
+
+                </div>
+
+            </a>
+
+        `;
+
+        userMenu.appendChild(notificationDropdown);
+
+
+        notification.addEventListener(
+            "click",
+            function (event) {
+
+                event.stopPropagation();
+
+                notificationDropdown.classList.toggle("show");
+
+                if (profileDropdown) {
+                    profileDropdown.classList.remove("show");
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       ADMIN PROFILE DROPDOWN
+       ===================================================== */
+
+    let profileDropdown = null;
+
+    if (avatar) {
+
+        profileDropdown =
+            document.createElement("div");
+
+        profileDropdown.className =
+            "topbar-dropdown";
+
+        profileDropdown.id =
+            "adminProfileDropdown";
+
+        profileDropdown.innerHTML = `
+
+            <div class="dropdown-header">
+
+                <strong>
+                    {{ current_user.name }}
+                </strong>
+
+                <span>
+                    Administrator Account
+                </span>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('admin.dashboard') }}"
+                class="dropdown-item"
+            >
+
+                <div class="dropdown-item-icon">
+                    📊
+                </div>
+
+                <div class="dropdown-item-text">
+
+                    <strong>Admin Dashboard</strong>
+
+                    <small>
+                        View hostel overview
+                    </small>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('admin.students') }}"
+                class="dropdown-item"
+            >
+
+                <div class="dropdown-item-icon">
+                    👥
+                </div>
+
+                <div class="dropdown-item-text">
+
+                    <strong>Students</strong>
+
+                    <small>
+                        View registered students
+                    </small>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('admin.rooms') }}"
+                class="dropdown-item"
+            >
+
+                <div class="dropdown-item-icon">
+                    🛏️
+                </div>
+
+                <div class="dropdown-item-text">
+
+                    <strong>Rooms</strong>
+
+                    <small>
+                        Manage hostel rooms
+                    </small>
+
+                </div>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('auth.logout') }}"
+                class="dropdown-item dropdown-logout"
+            >
+
+                <div class="dropdown-item-icon">
+                    🚪
+                </div>
+
+                <div class="dropdown-item-text">
+
+                    <strong>Logout</strong>
+
+                    <small>
+                        Sign out of Nivasa
+                    </small>
+
+                </div>
+
+            </a>
+
+        `;
+
+        userMenu.appendChild(profileDropdown);
+
+
+        avatar.addEventListener(
+            "click",
+            function (event) {
+
+                event.stopPropagation();
+
+                profileDropdown.classList.toggle("show");
+
+                if (notificationDropdown) {
+                    notificationDropdown.classList.remove("show");
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       CLOSE WHEN CLICKING OUTSIDE
+       ===================================================== */
+
+    document.addEventListener(
+        "click",
+        function () {
+
+            if (notificationDropdown) {
+                notificationDropdown.classList.remove("show");
+            }
+
+            if (profileDropdown) {
+                profileDropdown.classList.remove("show");
+            }
+
+        }
+    );
+
+
+    /* Don't close when clicking inside dropdown */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                event.target.closest(".topbar-dropdown")
+            ) {
+
+                event.stopPropagation();
+
+            }
+
+        },
+        true
+    );
+
+});
+
+</script>

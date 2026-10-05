@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Pay Hostel Fee | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- STUDENT SIDEBAR -->
+
+    {% include "student/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button class="mobile-menu">
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Pay Hostel Fee
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Student
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+
+        <section class="dashboard-content">
+
+
+            <!-- FLASH MESSAGES -->
+
+            {% include "_flash_messages.html" %}
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Pay Hostel Fee
+                    </h2>
+
+                    <p>
+                        Review your fee details before making the payment.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- PAYMENT CARD -->
+
+            <div class="dashboard-card fee-payment-card">
+
+
+                <!-- CARD HEADER -->
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Payment Details
+                        </h2>
+
+                        <p>
+                            Please verify the details below.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FEE INFORMATION -->
+
+                <div class="fee-payment-details">
+
+
+                    <!-- FEE TYPE -->
+
+                    <div class="fee-detail-item">
+
+                        <span>
+                            Fee Type
+                        </span>
+
+                        <strong>
+                            {{ fee.fee_type }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- AMOUNT -->
+
+                    <div class="fee-detail-item">
+
+                        <span>
+                            Amount
+                        </span>
+
+                        <strong class="payment-amount">
+                            ₹{{ "%.2f"|format(fee.amount) }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- DUE DATE -->
+
+                    <div class="fee-detail-item">
+
+                        <span>
+                            Due Date
+                        </span>
+
+                        <strong>
+                            {{ fee.due_date.strftime("%d %b %Y") }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="fee-detail-item">
+
+                        <span>
+                            Status
+                        </span>
+
+                        <span class="status-badge status-pending">
+                            Pending
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- DEMO PAYMENT NOTICE -->
+
+                <div class="payment-notice">
+
+                    <strong>
+                        💡 Demo Payment
+                    </strong>
+
+                    <p>
+                        This is a college project demonstration.
+                        No real money will be deducted from your account.
+                    </p>
+
+                </div>
+
+
+                <!-- PAYMENT FORM -->
+
+                <form
+                    method="POST"
+                    action="{{ url_for('student.pay_fee', fee_id=fee.id) }}"
+                >
+
+
+                    <!-- CSRF -->
+
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}"
+                    >
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="payment-actions">
+
+
+                        <button
+                            type="submit"
+                            class="admin-action-btn payment-btn"
+                        >
+                            💳 Pay ₹{{ "%.2f"|format(fee.amount) }}
+                        </button>
+
+
+                        <a
+                            href="{{ url_for('student.fees') }}"
+                            class="payment-cancel-btn"
+                        >
+                            Cancel
+                        </a>
+
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

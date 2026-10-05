@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Fees & Payments | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- STUDENT SIDEBAR -->
+
+    {% include "student/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button class="mobile-menu">
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Fees & Payments
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Student
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PAGE CONTENT -->
+
+        <section class="dashboard-content">
+
+
+            <!-- FLASH MESSAGES -->
+
+            {% include "_flash_messages.html" %}
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Fees & Payments
+                    </h2>
+
+                    <p>
+                        Track your hostel fees and payment status.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FEE STATISTICS -->
+
+            <div class="dashboard-stats">
+
+
+                <!-- TOTAL FEES -->
+
+                <div class="dashboard-card stat-card">
+
+                    <div class="stat-icon">
+                        ₹
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Total Fees
+                        </span>
+
+                        <strong>
+                            ₹{{ "%.2f"|format(total_fees) }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PAID -->
+
+                <div class="dashboard-card stat-card">
+
+                    <div class="stat-icon">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Paid
+                        </span>
+
+                        <strong>
+                            ₹{{ "%.2f"|format(paid_fees) }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PENDING -->
+
+                <div class="dashboard-card stat-card">
+
+                    <div class="stat-icon">
+                        !
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Pending
+                        </span>
+
+                        <strong>
+                            ₹{{ "%.2f"|format(pending_fees) }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- FEE RECORDS -->
+
+            <div class="dashboard-section">
+
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+                            Fee Records
+                        </h2>
+
+                        <p>
+                            Your complete hostel fee history.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% if fees %}
+
+
+                <!-- TABLE -->
+
+                <div class="admin-content-card">
+
+                    <div class="admin-table-wrapper">
+
+                        <table class="admin-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Fee Type
+                                    </th>
+
+                                    <th>
+                                        Amount
+                                    </th>
+
+                                    <th>
+                                        Due Date
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Payment Date
+                                    </th>
+
+                                    <th>
+                                        Action
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for fee in fees %}
+
+                                <tr>
+
+
+                                    <!-- FEE TYPE -->
+
+                                    <td>
+
+                                        <strong>
+                                            {{ fee.fee_type }}
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- AMOUNT -->
+
+                                    <td>
+
+                                        ₹{{ "%.2f"|format(fee.amount) }}
+
+                                    </td>
+
+
+                                    <!-- DUE DATE -->
+
+                                    <td>
+
+                                        {{ fee.due_date.strftime("%d %b %Y") }}
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        {% if fee.payment_status == "Paid" %}
+
+                                            <span class="status-badge status-approved">
+                                                Paid
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="status-badge status-pending">
+                                                Pending
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- PAYMENT DATE -->
+
+                                    <td>
+
+                                        {% if fee.payment_date %}
+
+                                            {{ fee.payment_date.strftime("%d %b %Y") }}
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- ACTION -->
+
+                                    <td>
+
+                                        {% if fee.payment_status == "Pending" %}
+
+                                            <a
+                                                href="{{ url_for('student.pay_fee', fee_id=fee.id) }}"
+                                                class="admin-action-btn"
+                                            >
+                                                💳 Pay Now
+                                            </a>
+
+                                        {% else %}
+
+                                            <span class="status-badge status-approved">
+                                                ✓ Paid
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                {% else %}
+
+
+                <!-- EMPTY STATE -->
+
+                <div class="admin-empty">
+
+                    <div class="admin-empty-icon">
+                        ₹
+                    </div>
+
+                    <h3>
+                        No fee records
+                    </h3>
+
+                    <p>
+                        Your fee records will appear here once
+                        they are added by the administration.
+                    </p>
+
+                </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

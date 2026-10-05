@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Room | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- STUDENT SIDEBAR -->
+    {% include "student/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button
+                    type="button"
+                    class="mobile-menu"
+                >
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    My Room
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Student
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="dashboard-content">
+
+
+            <!-- PAGE HEADER -->
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        My Room
+                    </h2>
+
+                    <p>
+                        Your current hostel accommodation.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if allocation %}
+
+
+                <!-- ROOM HERO -->
+                <div class="room-hero-card">
+
+
+                    <div class="room-icon">
+                        🛏️
+                    </div>
+
+
+                    <div class="room-main-info">
+
+                        <span>
+                            YOUR ROOM
+                        </span>
+
+                        <h1>
+                            Room {{ allocation.room.room_number }}
+                        </h1>
+
+                        <p>
+                            {{ allocation.room.hostel.name }}
+                        </p>
+
+                    </div>
+
+
+                    <div class="room-status">
+                        ACTIVE
+                    </div>
+
+
+                </div>
+
+
+                <!-- ROOM DETAILS -->
+                <div class="room-details-grid">
+
+
+                    <!-- HOSTEL -->
+                    <div class="room-detail">
+
+                        <span>
+                            🏠 Hostel
+                        </span>
+
+                        <strong>
+                            {{ allocation.room.hostel.name }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- ROOM NUMBER -->
+                    <div class="room-detail">
+
+                        <span>
+                            🚪 Room Number
+                        </span>
+
+                        <strong>
+                            {{ allocation.room.room_number }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- FLOOR -->
+                    <div class="room-detail">
+
+                        <span>
+                            🏢 Floor
+                        </span>
+
+                        <strong>
+                            {{ allocation.room.floor or "Ground Floor" }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- CAPACITY -->
+                    <div class="room-detail">
+
+                        <span>
+                            🛏️ Capacity
+                        </span>
+
+                        <strong>
+                            {{ allocation.room.capacity }} Beds
+                        </strong>
+
+                    </div>
+
+
+                    <!-- OCCUPIED -->
+                    <div class="room-detail">
+
+                        <span>
+                            👥 Occupied
+                        </span>
+
+                        <strong>
+                            {{ allocation.room.occupied }}
+                            / {{ allocation.room.capacity }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- AVAILABLE BEDS -->
+                    <div class="room-detail">
+
+                        <span>
+                            🟢 Available Beds
+                        </span>
+
+                        <strong>
+                            {{ allocation.room.available_beds }}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- EMPTY STATE -->
+                <div class="no-room-card">
+
+                    <div class="no-room-icon">
+                        🛏️
+                    </div>
+
+                    <h2>
+                        No Room Assigned
+                    </h2>
+
+                    <p>
+                        You haven't been assigned a hostel room yet.
+                    </p>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

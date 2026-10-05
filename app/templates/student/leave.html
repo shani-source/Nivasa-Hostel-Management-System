@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Leave Requests | Nivasa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body class="dashboard-body">
+
+
+<div class="dashboard-layout">
+
+
+    <!-- STUDENT SIDEBAR -->
+    {% include "student/_sidebar.html" %}
+
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <button
+                    type="button"
+                    class="mobile-menu"
+                >
+                    ☰
+                </button>
+
+                <span class="dashboard-title">
+                    Leave Requests
+                </span>
+
+            </div>
+
+
+            <div class="user-menu">
+
+                <div class="notification">
+                    🔔
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.name[0]|upper }}
+                </div>
+
+                <div>
+
+                    <strong>
+                        {{ user.name }}
+                    </strong>
+
+                    <small>
+                        Student
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <section class="dashboard-content">
+
+
+            <!-- FLASH MESSAGES -->
+            {% include "_flash_messages.html" %}
+
+
+            <!-- PAGE HEADER -->
+            <div class="page-header">
+
+                <div>
+
+                    <h1>
+                        My Leave Requests
+                    </h1>
+
+                    <p>
+                        View and track your submitted leave applications.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('student.apply_leave') }}"
+                    class="page-primary-btn"
+                >
+                    + Apply Leave
+                </a>
+
+            </div>
+
+
+            <!-- LEAVE REQUESTS -->
+            {% if leave_requests %}
+
+
+                <div class="leave-list">
+
+
+                    {% for leave in leave_requests %}
+
+
+                        <div class="leave-card">
+
+
+                            <!-- LEAVE TOP -->
+                            <div class="leave-top">
+
+
+                                <div class="leave-main">
+
+
+                                    <h3 class="leave-title">
+
+                                        📅
+                                        {{ leave.from_date.strftime("%d %b %Y") }}
+
+                                        —
+
+                                        {{ leave.to_date.strftime("%d %b %Y") }}
+
+                                    </h3>
+
+
+                                    <!-- DATE TAGS -->
+                                    <div class="leave-dates">
+
+                                        <span class="leave-date">
+
+                                            From:
+                                            {{ leave.from_date.strftime("%d %b %Y") }}
+
+                                        </span>
+
+
+                                        <span class="leave-date">
+
+                                            To:
+                                            {{ leave.to_date.strftime("%d %b %Y") }}
+
+                                        </span>
+
+                                    </div>
+
+
+                                    <!-- REASON -->
+                                    <div class="leave-reason">
+
+                                        {{ leave.reason }}
+
+                                    </div>
+
+
+                                </div>
+
+
+                                <!-- STATUS -->
+                                {% if leave.status == "Pending" %}
+
+                                    <span class="status-badge status-pending">
+                                        Pending
+                                    </span>
+
+                                {% elif leave.status == "Approved" %}
+
+                                    <span class="status-badge status-approved">
+                                        Approved
+                                    </span>
+
+                                {% elif leave.status == "Rejected" %}
+
+                                    <span class="status-badge status-rejected">
+                                        Rejected
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status-badge">
+                                        {{ leave.status }}
+                                    </span>
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                            <!-- ADMIN REMARK -->
+                            {% if leave.admin_remark %}
+
+                                <div class="admin-remark">
+
+                                    <strong>
+                                        Admin Remark
+                                    </strong>
+
+                                    <span>
+                                        {{ leave.admin_remark }}
+                                    </span>
+
+                                </div>
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- EMPTY STATE -->
+                <div class="admin-empty">
+
+
+                    <div class="admin-empty-icon">
+                        📅
+                    </div>
+
+
+                    <h3>
+                        No leave requests
+                    </h3>
+
+
+                    <p>
+                        You haven't submitted any leave requests yet.
+                    </p>
+
+
+                    <a
+                        href="{{ url_for('student.apply_leave') }}"
+                        class="page-primary-btn"
+                    >
+                        Apply for Leave
+                    </a>
+
+
+                </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+</body>
+
+</html>

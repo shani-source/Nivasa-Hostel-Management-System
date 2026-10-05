@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Nivasa | Smart Hostel Management</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- ==================== NAVBAR ==================== -->
+
+<header class="navbar">
+
+
+    <!-- LOGO -->
+
+    <div class="logo">
+
+        <span class="logo-icon">
+            🏠
+        </span>
+
+        <span class="logo-highlight">
+            Nivasa
+        </span>
+
+    </div>
+
+
+    <!-- MOBILE MENU -->
+
+    <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="Toggle navigation"
+    >
+        ☰
+    </button>
+
+
+    <!-- NAVIGATION -->
+
+    <nav id="navMenu">
+
+        <a href="#home">
+            Home
+        </a>
+
+        <a href="#features">
+            Features
+        </a>
+
+        <a href="#about">
+            About
+        </a>
+
+    </nav>
+
+
+    <!-- AUTH BUTTONS -->
+
+    <div class="nav-buttons">
+
+        <a
+            href="{{ url_for('auth.login') }}"
+            class="login-btn"
+        >
+            Login
+        </a>
+
+        <a
+            href="{{ url_for('auth.admin_login') }}"
+            class="signup-btn"
+        >
+            Get Started
+        </a>
+
+    </div>
+
+
+</header>
+
+
+
+<!-- ==================== MAIN ==================== -->
+
+<main id="home">
+
+
+    <!-- ==================== HERO ==================== -->
+
+    <section class="hero">
+
+
+        <div class="hero-content">
+
+
+            <div class="badge">
+                ✨ Smart Hostel Management
+            </div>
+
+
+            <h1>
+
+                Your Hostel.
+
+                <br>
+
+                <span>Smarter.</span> Simpler.
+
+            </h1>
+
+
+            <p>
+                Manage rooms, complaints, leaves, fees and hostel
+                services from one powerful platform.
+            </p>
+
+
+            <!-- HERO BUTTONS -->
+
+            <div class="hero-buttons">
+
+                <a
+                    href="{{ url_for('auth.admin_login') }}"
+                    class="primary-btn"
+                >
+                    Get Started →
+                </a>
+
+
+                <a
+                    href="#features"
+                    class="secondary-btn"
+                >
+                    Explore Features
+                </a>
+
+            </div>
+
+
+            <!-- TRUST POINTS -->
+
+            <div class="trust-text">
+
+                ✓ Easy to use
+                &nbsp;&nbsp;
+
+                ✓ Secure
+                &nbsp;&nbsp;
+
+                ✓ AI Powered
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ==================== DASHBOARD PREVIEW ==================== -->
+
+        <div class="dashboard-preview">
+
+
+            <div class="preview-top">
+
+                <span>
+                    Student Dashboard
+                </span>
+
+                <span class="online">
+                    ● Online
+                </span>
+
+            </div>
+
+
+            <div class="preview-card large-card">
+
+
+                <!-- PREVIEW WELCOME -->
+
+                <div class="welcome">
+
+                    <div>
+
+                        <small>
+                            Welcome back 👋
+                        </small>
+
+                        <h3>
+                            Student Dashboard
+                        </h3>
+
+                    </div>
+
+
+                    <div class="avatar">
+                        S
+                    </div>
+
+                </div>
+
+
+                <!-- PREVIEW STATS -->
+
+                <div class="stats">
+
+
+                    <div class="stat">
+
+                        <span>
+                            🛏️
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                16 × 2
+                            </strong>
+
+                            <small>
+                                Room
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <span>
+                            📋
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                8
+                            </strong>
+
+                            <small>
+                                Complaints
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <span>
+                            💳
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Paid
+                            </strong>
+
+                            <small>
+                                Fees
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ==================== FEATURES ==================== -->
+
+    <section
+        class="features"
+        id="features"
+    >
+
+
+        <div class="section-heading">
+
+
+            <span>
+                POWERFUL FEATURES
+            </span>
+
+
+            <h2>
+
+                Everything you need,
+
+                <br>
+
+                in one place.
+
+            </h2>
+
+
+            <p>
+                A complete digital solution for modern hostel management.
+            </p>
+
+
+        </div>
+
+
+
+        <div class="feature-grid">
+
+
+            <!-- ROOM MANAGEMENT -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🛏️
+                </div>
+
+                <h3>
+                    Room Management
+                </h3>
+
+                <p>
+                    View room availability, allocation and occupancy
+                    in real time.
+                </p>
+
+            </div>
+
+
+            <!-- AI -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🤖
+                </div>
+
+                <h3>
+                    AI Powered
+                </h3>
+
+                <p>
+                    Smart complaint classification and an AI hostel
+                    assistant.
+                </p>
+
+            </div>
+
+
+            <!-- COMPLAINTS -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📋
+                </div>
+
+                <h3>
+                    Complaints
+                </h3>
+
+                <p>
+                    Submit and track hostel complaints easily.
+                </p>
+
+            </div>
+
+
+            <!-- LEAVE -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📅
+                </div>
+
+                <h3>
+                    Leave Management
+                </h3>
+
+                <p>
+                    Apply for leave and track approval status online.
+                </p>
+
+            </div>
+
+
+            <!-- FEES -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    💰
+                </div>
+
+                <h3>
+                    Fee Management
+                </h3>
+
+                <p>
+                    Keep track of hostel fees and payment status.
+                </p>
+
+            </div>
+
+
+            <!-- NOTICES -->
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📢
+                </div>
+
+                <h3>
+                    Notices
+                </h3>
+
+                <p>
+                    Stay updated with important hostel announcements.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ==================== ABOUT ==================== -->
+
+    <section
+        class="about"
+        id="about"
+    >
+
+
+        <div>
+
+            <span class="section-label">
+                WHY NIVASA?
+            </span>
+
+
+            <h2>
+
+                Built for students.
+
+                <br>
+
+                Designed for simplicity.
+
+            </h2>
+
+        </div>
+
+
+        <p>
+
+            Nivasa brings everyday hostel activities into one
+            simple digital platform. Students can manage their
+            hostel life while administrators can efficiently
+            manage rooms, complaints, fees and notices.
+
+        </p>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- ==================== FOOTER ==================== -->
+
+<footer>
+
+
+    <div class="logo">
+
+        <span class="logo-icon">
+            🏠
+        </span>
+
+        <span class="logo-highlight">
+            Nivasa
+        </span>
+
+    </div>
+
+
+    <p>
+        Smart Hostel Management System
+    </p>
+
+
+    <p class="copyright">
+        © 2026 Nivasa. All rights reserved.
+    </p>
+
+
+</footer>
+
+
+
+<!-- JAVASCRIPT -->
+
+<script
+    src="{{ url_for('static', filename='js/main.js') }}"
+></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const menuToggle = document.querySelector(".menu-toggle");
+    const nav = document.querySelector(".navbar nav");
+
+    if (!menuToggle || !nav) {
+        return;
+    }
+
+    menuToggle.addEventListener("click", function (event) {
+
+        event.stopPropagation();
+
+        nav.classList.toggle("active");
+
+        /* Change hamburger → X */
+        if (nav.classList.contains("active")) {
+            menuToggle.innerHTML = "✕";
+            menuToggle.setAttribute("aria-label", "Close menu");
+        } else {
+            menuToggle.innerHTML = "☰";
+            menuToggle.setAttribute("aria-label", "Open menu");
+        }
+
+    });
+
+
+    /* Close menu after clicking a navigation link */
+
+    nav.querySelectorAll("a").forEach(function (link) {
+
+        link.addEventListener("click", function () {
+
+            nav.classList.remove("active");
+
+            menuToggle.innerHTML = "☰";
+
+            menuToggle.setAttribute(
+                "aria-label",
+                "Open menu"
+            );
+
+        });
+
+    });
+
+
+    /* Close menu when clicking outside */
+
+    document.addEventListener("click", function (event) {
+
+        if (
+            nav.classList.contains("active") &&
+            !nav.contains(event.target) &&
+            !menuToggle.contains(event.target)
+        ) {
+
+            nav.classList.remove("active");
+
+            menuToggle.innerHTML = "☰";
+
+            menuToggle.setAttribute(
+                "aria-label",
+                "Open menu"
+            );
+
+        }
+
+    });
+
+});
+</script>
+
+
+</body>
+
+</html>
